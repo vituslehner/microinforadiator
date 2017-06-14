@@ -4,5 +4,5 @@
 
 apply plugin: 'application'
 
-mainClassName = 'MicroInfoRadiatorApp'
+mainClassName = 'org.sociotech.urbanlifeplus.microinforadiator.MicroInfoRadiatorApp'
 
