@@ -1,0 +1,15 @@
+/*
+ * Copyright (c) 2017. Vitus Lehner. UrbanLife+. Universität der Bundeswehr München.
+ */
+
+subprojects {
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        testCompile 'junit:junit:4.12'
+    }
+}

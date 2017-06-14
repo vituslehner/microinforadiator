@@ -1,0 +1,8 @@
+/*
+ * Copyright (c) 2017. Vitus Lehner. UrbanLife+. Universität der Bundeswehr München.
+ */
+
+apply plugin: 'application'
+
+mainClassName = 'MicroInfoRadiatorApp'
+
