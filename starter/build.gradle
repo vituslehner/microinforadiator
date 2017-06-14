@@ -4,5 +4,12 @@
 
 apply plugin: 'application'
 
-mainClassName = 'org.sociotech.urbanlifeplus.microinforadiator.MicroInfoRadiatorApp'
+
+def mainClass = 'org.sociotech.urbanlifeplus.microinforadiator.MicroInfoRadiatorApp'
+jar {
+    manifest {
+        attributes 'Main-Class': mainClass
+    }
+}
+mainClassName = mainClass
 
