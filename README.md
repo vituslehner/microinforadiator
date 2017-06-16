@@ -8,12 +8,15 @@ natürlicher und impliziter Interaktion Passanten im urbanen Raum unterstützen 
 
 Um das Projekt zu kompilieren und zu bauen, ins Projektverzeichnis wechseln und folgenden Befehl ausführen:
 
-`./gradlew clean build`
-
+```
+./gradlew clean build
+```
 Unter Windows ist das gradlew.bat Skript entsprechend zu verwenden.
 
 ## Ausführen
 
 Zum Starten der Anwendung zunächst den Build ausführen, anschließend:
 
-`./gradlew run`
+```
+./gradlew run
+```
