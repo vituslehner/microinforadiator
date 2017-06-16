@@ -4,14 +4,14 @@
 
 package org.sociotech.urbanlifeplus.microinforadiator;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
 public class MicroInfoRadiatorApp {
 
-    public String getGreeting() {
-        return "Hello world.";
-    }
-
     public static void main(String[] args) {
-        System.out.println(new MicroInfoRadiatorApp().getGreeting());
+        SpringApplication.run(MicroInfoRadiatorApp.class, args);
     }
 
 }

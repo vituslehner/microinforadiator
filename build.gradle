@@ -2,9 +2,17 @@
  * Copyright (c) 2017. Vitus Lehner. UrbanLife+. Universität der Bundeswehr München.
  */
 
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
 allprojects {
-    apply plugin: 'idea'
-    apply plugin: 'eclipse'
+    group = 'org.sociotech.urbanlifeplus'
+    version = '1.0.0'
+
+    ext {
+        springBootVersion = '1.5.4.RELEASE'
+    }
 }
 
 subprojects {
@@ -14,6 +22,9 @@ subprojects {
         mavenCentral()
     }
 
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
     dependencies {
         testCompile 'junit:junit:4.12'
     }
@@ -22,13 +33,13 @@ subprojects {
 apply plugin: 'org.ajoberstar.grgit'
 
 buildscript {
-
     repositories {
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath 'org.ajoberstar:gradle-git:1.7.2'
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
     }
 }
 
@@ -38,4 +49,15 @@ task resinDeploy {
     doLast {
         grgit.push(all: false, remote: 'resin')
     }
+}
+
+ext {
+    mainClass = 'org.sociotech.urbanlifeplus.microinforadiator.MicroInfoRadiatorApp'
+}
+bootRepackage {
+    mainClass = project.ext.mainClass
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5'
 }

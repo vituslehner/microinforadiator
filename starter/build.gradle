@@ -4,12 +4,16 @@
 
 apply plugin: 'application'
 
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter:${springBootVersion}")
+}
 
-def mainClass = 'org.sociotech.urbanlifeplus.microinforadiator.MicroInfoRadiatorApp'
 jar {
+    baseName = 'ulp-mikroinfostrahler'
+    version = project.version
     manifest {
-        attributes 'Main-Class': mainClass
+        attributes 'Main-Class': rootProject.ext.mainClass
     }
 }
-mainClassName = mainClass
+mainClassName = rootProject.ext.mainClass
 
