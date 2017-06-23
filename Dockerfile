@@ -11,5 +11,8 @@ MAINTAINER Vitus Lehner <student@vitus-lehner.de>
 #RUN mkdir /opt/ulp-mir
 #RUN cp /opt/ulp-mir-source/starter/build/libs/starter.jar /opt/ulp-mir/
 
+RUN apk add --update curl && \
+    rm -rf /var/cache/apk/*
+
 #CMD ["java", "-jar", "/opt/ulp-mir/starter.jar"]
-CMD ["echo", "'Hallo UrbanLife+!'"]
+CMD watch -n 10 curl https://api.chucknorris.io/jokes/random
