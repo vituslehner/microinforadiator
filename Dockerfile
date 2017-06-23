@@ -1,4 +1,5 @@
-FROM resin/raspberrypi3-alpine-openjdk:openjdk-8u121-jdk
+FROM resin/raspberrypi3-alpine
+#-openjdk:openjdk-8u121-jdk
 MAINTAINER Vitus Lehner <student@vitus-lehner.de>
 
 #RUN apk update && apk add bash
@@ -11,4 +12,4 @@ MAINTAINER Vitus Lehner <student@vitus-lehner.de>
 #RUN cp /opt/ulp-mir-source/starter/build/libs/starter.jar /opt/ulp-mir/
 
 #CMD ["java", "-jar", "/opt/ulp-mir/starter.jar"]
-CMD ["bash", "echo", "'Hallo UrbanLife+!'"]
+CMD ["echo", "'Hallo UrbanLife+!'"]
