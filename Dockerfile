@@ -7,7 +7,7 @@ RUN apk add --update \
     py-pip \
     build-base \
     curl \
-    tar \
+    tar \ 
   && pip install virtualenv \
   && rm -rf /var/cache/apk/*
 
