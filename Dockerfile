@@ -6,7 +6,6 @@ RUN apk add --update \
     python-dev \
     py-pip \
     build-base \
-    python-sense-hat \
 #    curl \
 #    tar \ 
   && pip install virtualenv \
@@ -14,7 +13,7 @@ RUN apk add --update \
 
 #RUN mkdir /opt/sense-hat
 ADD . /opt
-
+RUN pip install sense-hat
 
 WORKDIR /opt/python-sense-hat-2.2.0
 RUN python setup.py install
