@@ -6,6 +6,7 @@ RUN apk add --update \
     python-dev \
     py-pip \
     build-base \
+    zlib \
   && pip install -U pip setuptools virtualenv \
   && easy_install Pillow \
   && rm -rf /var/cache/apk/*
