@@ -9,7 +9,7 @@ RUN apk add --update \
   && pip install virtualenv \
   && rm -rf /var/cache/apk/*
 
-RUN pip install sense-hat
+RUN pip install -v sense-hat
 
 ADD . /opt
 
