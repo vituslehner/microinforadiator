@@ -6,21 +6,15 @@ RUN apk add --update \
     python-dev \
     py-pip \
     build-base \
-#    curl \
-#    tar \ 
   && pip install virtualenv \
   && rm -rf /var/cache/apk/*
 
-#RUN mkdir /opt/sense-hat
-ADD . /opt
 RUN pip install sense-hat
 
-WORKDIR /opt/python-sense-hat-2.2.0
-RUN python setup.py install
+ADD . /opt
 
-#RUN mkdir /opt/ulp-mir
 WORKDIR /opt/ulp-mir
-#ADD . /opt/ulp-mir
 
-CMD modprobe i2c-dev && java -jar bin/ulp-mikroinfostrahler-$(cat version.txt).jar
+CMD modprobe i2c-dev && python ../sense-hat/test.py
+#java -jar bin/ulp-mikroinfostrahler-$(cat version.txt).jar
 #["java", "-jar", "/opt/ulp-mir/starter.jar"]
