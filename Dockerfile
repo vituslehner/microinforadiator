@@ -6,7 +6,7 @@ RUN apk add --update \
     python-dev \
     py-pip \
     build-base \
-  && pip install virtualenv \
+  && pip install virtualenv Pillow \
   && rm -rf /var/cache/apk/*
 
 RUN pip install -v sense-hat
