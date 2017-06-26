@@ -6,7 +6,7 @@ RUN apk add --update \
     python-dev \
     py-pip \
     build-base \
-    sense-hat \
+    python-sense-hat \
 #    curl \
 #    tar \ 
   && pip install virtualenv \
