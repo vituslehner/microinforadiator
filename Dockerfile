@@ -5,5 +5,5 @@ RUN mkdir /opt/ulp-mir
 WORKDIR /opt/ulp-mir
 ADD . /opt/ulp-mir
 
-CMD java -jar ulp-mikroinfostrahler-$(cat version.txt).jar
+CMD java -jar bin/ulp-mikroinfostrahler-$(cat version.txt).jar
 #["java", "-jar", "/opt/ulp-mir/starter.jar"]
