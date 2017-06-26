@@ -6,12 +6,7 @@ RUN apk add --update \
     python-dev \
     py-pip \
     build-base \
-  dumb-init \
-  musl \
-  linux-headers \
-  bash \
-  git \
-  ca-certificates \
+    sense-hat \
 #    curl \
 #    tar \ 
   && pip install virtualenv \
