@@ -6,9 +6,15 @@ RUN apk add --update \
     python-dev \
     py-pip \
     build-base \
-    sense-hat \
+    curl \
   && pip install virtualenv \
   && rm -rf /var/cache/apk/*
+
+RUN mkdir /opt/sense-hat
+WORKDIR /opt/sense-hat
+RUN curl https://github.com/RPi-Distro/python-sense-hat/archive/v2.2.0.tar.gz | tar xvz \
+    && cd python-sense-hat-2.2.0
+    && python setup.py install
 
 RUN mkdir /opt/ulp-mir
 WORKDIR /opt/ulp-mir
