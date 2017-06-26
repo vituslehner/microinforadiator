@@ -6,7 +6,7 @@ RUN apk add --update \
     python-dev \
     py-pip \
     build-base \
-  && pip install virtualenv \
+  && pip install -U pip setuptools virtualenv \
   && easy_install Pillow \
   && rm -rf /var/cache/apk/*
 
