@@ -7,9 +7,13 @@ RUN apk add --update \
     py-pip \
     build-base \
     zlib \
+    zlib-dev \
+    jpeg-dev \
   && pip install -U pip setuptools virtualenv \
   && easy_install Pillow \
   && rm -rf /var/cache/apk/*
+
+ENV LIBRARY_PATH=/lib:/usr/lib
 
 RUN pip install -v sense-hat
 
