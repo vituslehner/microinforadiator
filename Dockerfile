@@ -25,7 +25,7 @@ ADD . /opt
 
 WORKDIR /opt/python-rtimulib
 
-RUN chmod +x setup.py && python setup.py build && python setup.py install
+RUN python setup.py build && python setup.py install
 
 WORKDIR /opt/ulp-mir
 
