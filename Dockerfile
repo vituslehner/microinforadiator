@@ -23,6 +23,10 @@ RUN pip install -v sense-hat
 
 ADD . /opt
 
+WORKDIR /opt/python-rtimulib
+
+RUN python setup.py build && python setup.py install
+
 WORKDIR /opt/ulp-mir
 
 CMD echo "Hallo" && modprobe i2c-dev && echo $(python ../sense-hat/test.py)
