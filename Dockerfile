@@ -21,7 +21,7 @@ MAINTAINER Vitus Lehner <student@vitus-lehner.de>
 
 #RUN apk add python-rtimulib
 
-RUN apt-get update && apt-get install python python-dev py-pip build-base sense-hat
+RUN apt-get update && apt-get install python python-dev sense-hat
 
 ADD . /opt
 
