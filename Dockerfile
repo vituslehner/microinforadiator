@@ -1,4 +1,4 @@
-FROM resin/raspberry-pi-openjdk:openjdk-8u121-jdk
+FROM resin/raspberry-pi-openjdk:openjdk-8-jdk
 MAINTAINER Vitus Lehner <student@vitus-lehner.de>
 
 #RUN apk add --update \
