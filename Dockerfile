@@ -25,7 +25,7 @@ ADD . /opt
 
 WORKDIR /opt/rtimulib
 
-RUN make && cd Linux/python && python setup.py build && python setup.py install
+RUN make && make install && cd Linux/python && python setup.py build && python setup.py install
 
 WORKDIR /opt/ulp-mir
 
