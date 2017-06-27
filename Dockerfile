@@ -25,7 +25,7 @@ ADD . /opt
 
 WORKDIR /opt/rtimulib
 
-RUN apk update && apk add cmake && cmake && cd Linux/python && python setup.py build && python setup.py install
+RUN apk update && apk add cmake && cmake . && cd Linux/python && python setup.py build && python setup.py install
 
 WORKDIR /opt/ulp-mir
 
