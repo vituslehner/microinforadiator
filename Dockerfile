@@ -9,6 +9,8 @@ RUN apk add --update \
     zlib \
     zlib-dev \
     jpeg-dev \
+    dbus-dev \
+    dbus-glib-de \
   && pip install -U pip setuptools virtualenv \
   && easy_install Pillow \
   && rm -rf /var/cache/apk/*
