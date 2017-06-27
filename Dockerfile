@@ -1,31 +1,33 @@
-FROM resin/raspberry-pi-alpine-openjdk:openjdk-8u121-jdk
+FROM resin/raspberry-pi-openjdk:openjdk-8u121-jdk
 MAINTAINER Vitus Lehner <student@vitus-lehner.de>
 
-RUN apk add --update \
-    python \
-    python-dev \
-    py-pip \
-    build-base \
-    zlib \
-    zlib-dev \
-    jpeg-dev \
-    dbus-dev \
-    dbus-glib-dev \
-  && pip install -U pip setuptools virtualenv \
-  && easy_install Pillow \
-  && rm -rf /var/cache/apk/*
+#RUN apk add --update \
+#    python \
+#    python-dev \
+#    py-pip \
+#    build-base \
+#    zlib \
+#    zlib-dev \
+#    jpeg-dev \
+#    dbus-dev \
+#    dbus-glib-dev \
+#  && pip install -U pip setuptools virtualenv \
+#  && easy_install Pillow \
+#  && rm -rf /var/cache/apk/*
 
-ENV LIBRARY_PATH=/lib:/usr/lib
+#ENV LIBRARY_PATH=/lib:/usr/lib
 
-RUN pip install -v sense-hat
+#RUN pip install -v sense-hat
 
 #RUN apk add python-rtimulib
 
+RUN apt-get update && apt-get install python python-dev py-pip build-base sense-hat
+
 ADD . /opt
 
-WORKDIR /opt/rtimulib
+#WORKDIR /opt/rtimulib
 
-RUN apk update && apk add cmake && cmake ./RTIMULib && cd Linux/python && python setup.py build && python setup.py install
+#RUN apk update && apk add cmake && cmake ./RTIMULib && cd Linux/python && python setup.py build && python setup.py install
 
 WORKDIR /opt/ulp-mir
 
