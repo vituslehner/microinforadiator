@@ -17,6 +17,8 @@ ENV LIBRARY_PATH=/lib:/usr/lib
 
 RUN pip install -v sense-hat
 
+RUN apk add python-rtimulib
+
 ADD . /opt
 
 WORKDIR /opt/ulp-mir
