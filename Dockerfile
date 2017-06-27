@@ -10,7 +10,7 @@ RUN apk add --update \
     zlib-dev \
     jpeg-dev \
     dbus-dev \
-    dbus-glib-de \
+    dbus-glib-dev \
   && pip install -U pip setuptools virtualenv \
   && easy_install Pillow \
   && rm -rf /var/cache/apk/*
@@ -19,7 +19,7 @@ ENV LIBRARY_PATH=/lib:/usr/lib
 
 RUN pip install -v sense-hat
 
-RUN apk add python-rtimulib
+#RUN apk add python-rtimulib
 
 ADD . /opt
 
