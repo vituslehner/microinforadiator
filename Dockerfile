@@ -23,9 +23,9 @@ RUN pip install -v sense-hat
 
 ADD . /opt
 
-WORKDIR /opt/python-rtimulib
+WORKDIR /opt/rtimulib
 
-RUN python setup.py build && python setup.py install
+RUN make && cd Linux/python && python setup.py build && python setup.py install
 
 WORKDIR /opt/ulp-mir
 
