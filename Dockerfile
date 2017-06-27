@@ -12,8 +12,8 @@ RUN apk add --update \
     dbus-dev \
     dbus-glib-dev \
   && pip install -U pip setuptools virtualenv \
-  && easy_install Pillow \
-  && rm -rf /var/cache/apk/*
+  && easy_install Pillow 
+#  && rm -rf /var/cache/apk/*
 
 ENV LIBRARY_PATH=/lib:/usr/lib
 
