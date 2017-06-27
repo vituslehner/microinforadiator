@@ -21,6 +21,6 @@ ADD . /opt
 
 WORKDIR /opt/ulp-mir
 
-CMD modprobe i2c-dev && python ../sense-hat/test.py
+CMD echo "Hallo" && modprobe i2c-dev && echo $(python ../sense-hat/test.py)
 #java -jar bin/ulp-mikroinfostrahler-$(cat version.txt).jar
 #["java", "-jar", "/opt/ulp-mir/starter.jar"]
