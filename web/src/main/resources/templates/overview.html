@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2017. Vitus Lehner. UrbanLife+. Universität der Bundeswehr München.
+  -->
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="UTF-8"/>
+    <title>UrbanLife+ Microinforadiator Overview</title>
+
+    <style type="text/css">
+        html, body {
+            font-family: "Helvetica Neue", "Helvetica", sans-serif;
+            background-color: #F2F1F2;
+        }
+
+        #wrapper {
+            width: 95%;
+            margin: 25px auto;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border: 1px solid #DDDDDD;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <p>UrbanLife+</p>
+    <h1>Mikroinformationsstrahler</h1>
+    <hr/>
+    <p>MIR-ID: <strong th:text="${mir_id}"/> <span th:text="${message}"/></p>
+</div>
+</body>
+</html>
