@@ -3,7 +3,7 @@ MAINTAINER Vitus Lehner <student@vitus-lehner.de>
 
 RUN dpkg --purge --force-depends ca-certificates-java && \
     apt-get update && \
-    apt-get install -f \
+    apt-get install -f && \
     apt-get install ca-certificates-java && \
     apt-get install python python-dev sense-hat
 
