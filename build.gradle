@@ -25,6 +25,9 @@ allprojects {
     targetCompatibility = 1.8
 
     dependencies {
+        compile("org.springframework.boot:spring-boot-starter:${springBootVersion}")
+        compile("com.google.guava:guava:22.0")
+
         testCompile 'junit:junit:4.12'
     }
 }
@@ -33,7 +36,9 @@ subprojects {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter:${springBootVersion}")
+    compile project(":core")
+    compile project(":interface")
+    compile project(":web")
 }
 
 buildscript {

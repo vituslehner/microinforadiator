@@ -4,5 +4,6 @@
 
 dependencies {
     compile project(":core:service")
-    compile project(":core:reactor")
+    compile project(":core:model")
+    //compile project(":interface")
 }

@@ -1,0 +1,14 @@
+/*
+ * Copyright (c) 2017. Vitus Lehner. UrbanLife+. Universität der Bundeswehr München.
+ */
+
+dependencies {
+    compile project(":core")
+    compile project(":interface")
+
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+}
+
+
