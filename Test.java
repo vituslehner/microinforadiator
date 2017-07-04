@@ -10,9 +10,7 @@ import java.net.SocketException;
 
 public class Test {
     public static void main(String[] args) throws SocketException {
-        for(NetworkInterface i : NetworkInterface.getNetworkInterfaces()){
-            System.out.println(i.toString());
-        }Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
         while (interfaces.hasMoreElements()) {
             System.out.println(interfaces.nextElement().toString());
         }
