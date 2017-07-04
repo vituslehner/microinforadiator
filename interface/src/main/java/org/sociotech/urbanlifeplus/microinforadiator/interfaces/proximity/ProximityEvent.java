@@ -4,6 +4,7 @@
 
 package org.sociotech.urbanlifeplus.microinforadiator.interfaces.proximity;
 
+import com.google.common.base.MoreObjects;
 import org.sociotech.urbanlifeplus.microinforadiator.interfaces.UserInputEvent;
 
 /**
@@ -20,5 +21,13 @@ public class ProximityEvent extends UserInputEvent {
 
     public Proximity getProximity() {
         return proximity;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("userId", getUserId())
+                .add("proximity", proximity)
+                .toString();
     }
 }
