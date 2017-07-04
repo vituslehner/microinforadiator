@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractLightInterface implements LightInterface {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private Collection<LightColor> colors = new HashSet<>();
 
