@@ -3,6 +3,7 @@ gradle/
 */gradle/
 .gradle/
 build/
+classes/
 
 # IntelliJ IDEA
 .idea/
