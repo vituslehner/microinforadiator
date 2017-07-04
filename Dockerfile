@@ -32,6 +32,6 @@ ADD . /opt/ulp-mir-source
 WORKDIR /opt/ulp-mir-source
 
 #RUN javac Test.java && ls -la && java Test &&
-RUN ifconfig && java -version && gradle -v && gradle --debug --stacktrace clean build
+RUN ip addr && ifconfig && java -version && gradle -v && gradle --debug --stacktrace clean build
 
 CMD gradle bootRun
