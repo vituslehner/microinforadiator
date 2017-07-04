@@ -1,7 +1,9 @@
 FROM resin/raspberry-pi-openjdk:openjdk-8-jdk
 MAINTAINER Vitus Lehner <student@vitus-lehner.de>
 
-RUN apt-get update && apt-get install python python-dev sense-hat
+RUN dpkg --purge --force-depends ca-certificates-java && \
+    apt-get update && \
+    apt-get install python python-dev sense-hat ca-certificates-java
 
 ADD . /opt/ulp-mir-source
 WORKDIR /opt/ulp-mir-source
