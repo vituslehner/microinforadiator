@@ -31,6 +31,6 @@ ENV PATH=${PATH}:${GRADLE_HOME}/bin
 ADD . /opt/ulp-mir-source
 WORKDIR /opt/ulp-mir-source
 
-RUN ifconfig && gradle --debug clean build
+RUN ifconfig && java -version && gradle -v && gradle --debug clean build
 
 CMD gradle bootRun
