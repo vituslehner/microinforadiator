@@ -8,7 +8,7 @@ MAINTAINER Vitus Lehner <student@vitus-lehner.de>
 #    apt-get install python python-dev sense-hat
 
 RUN apt-get update && \
-    apt-get install -y unzip
+    apt-get install -y unzip ca-certificates
 
 ENV GRADLE_HOME /opt/gradle
 ENV GRADLE_VERSION 3.5
