@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author vituslehner 03.07.17
@@ -42,19 +44,21 @@ public class SenseHatLightInterface extends AbstractLightInterface {
 
         disposeProcess();
 
-        String colorArgs = buildColorArgs();
-        startProcess(colorArgs);
+        String[] args = buildArgs();
+        startProcess(args);
     }
 
-    private String buildColorArgs() {
-        StringBuilder colorArgsBuilder = new StringBuilder();
-        getColors().forEach(color -> colorArgsBuilder.append(" ").append(color.toString()));
-        return colorArgsBuilder.toString();
+    private String[] buildArgs() {
+        List<String> args = new ArrayList<>();
+        args.add("python");
+        args.add(scriptPath);
+        getColors().forEach(color -> args.add(color.toString()));
+        return (String[]) args.toArray();
     }
 
-    private void startProcess(String args) {
+    private void startProcess(String[] args) {
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath, args)
+            ProcessBuilder processBuilder = new ProcessBuilder(args)
                     .inheritIO();
             logger.info("Executing command: {}", processBuilder.command());
             pythonProcess = processBuilder.start();
