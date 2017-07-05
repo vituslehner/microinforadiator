@@ -55,8 +55,7 @@ public class SenseHatLightInterface extends AbstractLightInterface {
     private void startProcess(String args) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath, args)
-                    .redirectErrorStream(true)
-                    .redirectOutput(ProcessBuilder.Redirect.INHERIT);
+                    .inheritIO();
             logger.info("Executing command: {}", processBuilder.command());
             pythonProcess = processBuilder.start();
         } catch (IOException e) {
