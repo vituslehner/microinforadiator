@@ -46,8 +46,8 @@ public class NavigationReactor {
         Proximity proximity = proximityEvent.getProximity();
         if (proximity == NEAR) {
             lightService.addColor(getOrCreateUserColor(user));
-        } else if (proximity == FAR) {
-
+        } else if (proximity == FAR && user.getColor() != null) {
+            lightService.removeColor(user.getColor());
         }
     }
 
