@@ -19,6 +19,7 @@ if len(colors) == 0:
 
 def getColorTuple(code):
     pprint(code)
+    code = code.strip()
     print 'Color code: ', code
     switcher = {
         "RED": (255, 0, 0),
