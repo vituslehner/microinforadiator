@@ -1,4 +1,4 @@
-FROM resin/rpi-raspbian:stretch
+FROM resin/rpi-raspbian:jessie
 MAINTAINER Vitus Lehner <student@vitus-lehner.de>
 
 #RUN dpkg --purge --force-depends ca-certificates-java && \
