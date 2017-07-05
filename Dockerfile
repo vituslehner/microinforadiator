@@ -1,4 +1,4 @@
-FROM resin/raspberrypi-debian:wheezy
+FROM resin/raspberrypi-debian:stretch
 MAINTAINER Vitus Lehner <student@vitus-lehner.de>
 
 #RUN dpkg --purge --force-depends ca-certificates-java && \
