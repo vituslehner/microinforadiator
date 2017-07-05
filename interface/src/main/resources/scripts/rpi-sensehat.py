@@ -7,9 +7,9 @@ from pprint import pprint
 sense = SenseHat()
 
 colors = sys.argv
-pprint(vars(colors))
+pprint(colors)
 colors.pop(0)
-pprint(vars(colors))
+pprint(colors)
 
 if len(colors) == 0:
     print 'No colors given. Clearing HAT and exiting.'
@@ -18,7 +18,7 @@ if len(colors) == 0:
 
 
 def getColorTuple(code):
-    pprint(vars(code))
+    pprint(code)
     print 'Color code: ', code
     switcher = {
         "RED": (255, 0, 0),
