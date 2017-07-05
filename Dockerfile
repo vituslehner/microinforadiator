@@ -1,4 +1,4 @@
-FROM resin/raspberrypi3-openjdk:openjdk-8u131-jdk
+FROM resin/raspberrypi-debian:wheezy
 MAINTAINER Vitus Lehner <student@vitus-lehner.de>
 
 #RUN dpkg --purge --force-depends ca-certificates-java && \
@@ -14,7 +14,7 @@ RUN echo 'deb http://archive.raspberrypi.org/debian/ wheezy main' >> /etc/apt/so
     apt-key add /key/raspberrypi.gpg.key
 
 RUN apt-get update && \
-    apt-get -y install wget unzip ca-certificates && \
+    apt-get -y install oracle-java8-jdk wget unzip ca-certificates && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV GRADLE_VERSION 2.5
