@@ -79,9 +79,9 @@ public class SenseHatLightInterface extends AbstractLightInterface {
             tmpScript.deleteOnExit();
 
             FileCopyUtils.copy(original, new FileOutputStream(tmpScript));
-            logger.info("Copied RPi SenseHAT Python Script to {}", tmpScript.getAbsolutePath());
+            boolean isExecutable = tmpScript.setExecutable(true);
+            logger.info("Copied RPi SenseHAT Python Script to {} and made executable: {}", tmpScript.getAbsolutePath(), isExecutable);
             return tmpScript.getAbsolutePath();
-
         } catch (IOException e) {
             logger.error("Could not create temporary python script file.");
             throw new IllegalStateException("Could not copy rpi sensehat python script.");
