@@ -17,7 +17,7 @@ RUN apt-get update && \
     apt-get -y install oracle-java8-jdk wget unzip ca-certificates && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-ENV GRADLE_VERSION 2.5
+ENV GRADLE_VERSION 3.5
 RUN wget "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" && \
     unzip "gradle-${GRADLE_VERSION}-bin.zip" -d /usr/src/ && \
     rm "gradle-${GRADLE_VERSION}-bin.zip" && \
@@ -49,6 +49,6 @@ ADD . /opt/ulp-mir-source
 WORKDIR /opt/ulp-mir-source
 
 #RUN javac Test.java && ls -la && java Test &&
-RUN bash java -version && gradle -v && gradle --no-daemon --debug --full-stacktrace clean build
+CMD java -version && gradle -v && gradle --no-daemon --debug --full-stacktrace clean build bootRun
 
-CMD gradle bootRun
+#CMD gradle bootRun
