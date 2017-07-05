@@ -18,9 +18,8 @@ if len(colors) == 0:
 
 
 def getColorTuple(code):
-    pprint(code)
     code = code.strip()
-    print 'Color code: ', code
+    #print 'Color code: ', code
     switcher = {
         "RED": (255, 0, 0),
         "GREEN": (0, 255, 0),
@@ -37,7 +36,7 @@ while True:
     if i == len(colors):
         i = 0
     c = colors[i]
-    print 'Showing color ', c, '.'
+    #print 'Showing color ', c, '.'
     sense.show_letter('V', (255, 255, 255), getColorTuple(c))
     sleep(2)
     i = i + 1
