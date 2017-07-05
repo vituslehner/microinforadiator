@@ -6,6 +6,7 @@ from time import sleep
 sense = SenseHat()
 
 colors = sys.argv
+colors.pop(0)
 
 if len(colors) == 0:
     print 'No colors given. Clearing HAT and exiting.'
@@ -33,3 +34,4 @@ while True:
     print 'Showing color ', c, '.'
     sense.show_letter('V', (255, 255, 255), getColorTuple(c))
     sleep(2)
+    i = i + 1
