@@ -45,6 +45,8 @@ RUN wget "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin
 #
 #ENV PATH=${PATH}:${GRADLE_HOME}/bin
 
+VOLUME /root/.gradle
+
 ADD . /opt/ulp-mir-source
 WORKDIR /opt/ulp-mir-source
 
