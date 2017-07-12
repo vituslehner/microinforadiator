@@ -51,6 +51,6 @@ ADD . /opt/ulp-mir-source
 WORKDIR /opt/ulp-mir-source
 
 #RUN javac Test.java && ls -la && java Test &&
-CMD java -version && gradle -v && gradle --no-daemon clean build bootRun
+CMD gradle --no-daemon clean build bootRun
 
 #CMD gradle bootRun
