@@ -4,6 +4,8 @@
 
 package org.sociotech.urbanlifeplus.microinforadiator.model.event;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 import org.sociotech.urbanlifeplus.microinforadiator.interfaces.proximity.Proximity;
 import org.sociotech.urbanlifeplus.microinforadiator.model.User;
@@ -15,8 +17,11 @@ public class UserProximityEvent extends ReactorEvent {
 
     private final Proximity proximity;
 
-    public UserProximityEvent(User user, Proximity proximity) {
-        super(user);
+    @JsonCreator
+    public UserProximityEvent(@JsonProperty("user") User user,
+                              @JsonProperty("mirId") String mirId,
+                              @JsonProperty("proximity") Proximity proximity) {
+        super(user, mirId);
         this.proximity = proximity;
     }
 
@@ -27,8 +32,9 @@ public class UserProximityEvent extends ReactorEvent {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("user", getUser())
                 .add("proximity", proximity)
+                .add("user", getUser())
+                .add("mirId", getMirId())
                 .toString();
     }
 }

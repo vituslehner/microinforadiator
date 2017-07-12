@@ -3,7 +3,7 @@
  */
 
 dependencies {
-    compile project(":interface")
-
+    compile("org.springframework.boot:spring-boot-starter-integration:${springBootVersion}")
+    compile("org.springframework.integration:spring-integration-mqtt:${springVersion}")
     compile("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
 }

@@ -8,6 +8,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sociotech.urbanlifeplus.microinforadiator.CoreConfiguration;
 import org.sociotech.urbanlifeplus.microinforadiator.interfaces.proximity.ProximityEvent;
 import org.sociotech.urbanlifeplus.microinforadiator.model.User;
 import org.sociotech.urbanlifeplus.microinforadiator.model.event.UserProximityEvent;
@@ -27,14 +28,16 @@ public class ProximityService {
     private final EventBus reactorEventBus;
 
     private final UserService userService;
+    private final CoreConfiguration coreConfiguration;
 
     @Autowired
     public ProximityService(@Qualifier("interfaceEventBus") EventBus interfaceEventBus,
                             @Qualifier("reactorEventBus") EventBus reactorEventBus,
-                            UserService userService) {
+                            UserService userService, CoreConfiguration coreConfiguration) {
         this.interfaceEventBus = interfaceEventBus;
         this.reactorEventBus = reactorEventBus;
         this.userService = userService;
+        this.coreConfiguration = coreConfiguration;
 
         this.interfaceEventBus.register(this);
     }
@@ -45,7 +48,7 @@ public class ProximityService {
         LOGGER.debug("INTRFC: Received proximity event: {}", interfaceEvent);
         User user = userService.findUserbyId(interfaceEvent.getUserId());
 
-        UserProximityEvent reactorEvent = new UserProximityEvent(user, interfaceEvent.getProximity());
+        UserProximityEvent reactorEvent = new UserProximityEvent(user, coreConfiguration.getId(), interfaceEvent.getProximity());
         reactorEventBus.post(reactorEvent);
     }
 

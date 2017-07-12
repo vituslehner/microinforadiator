@@ -4,6 +4,8 @@
 
 package org.sociotech.urbanlifeplus.microinforadiator.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 import org.sociotech.urbanlifeplus.microinforadiator.interfaces.light.LightColor;
 import org.sociotech.urbanlifeplus.microinforadiator.interfaces.proximity.Proximity;
@@ -23,7 +25,10 @@ public class User extends Cachable {
     private LightColor color;
 
 
-    public User(String id, String firstName, String lastName) {
+    @JsonCreator
+    public User(@JsonProperty("id") String id,
+                @JsonProperty("firstName") String firstName,
+                @JsonProperty("lastName") String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -47,6 +52,14 @@ public class User extends Cachable {
 
     public void setRoute(Route route) {
         this.route = route;
+    }
+
+    public Proximity getProximity() {
+        return proximity;
+    }
+
+    public void setProximity(Proximity proximity) {
+        this.proximity = proximity;
     }
 
     public LightColor getColor() {

@@ -5,4 +5,5 @@
 dependencies {
     compile project(":core:model")
     compile project(":interface")
+    compile project(":mqtt")
 }
