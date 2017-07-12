@@ -8,13 +8,14 @@ import org.sociotech.urbanlifeplus.microinforadiator.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
  * @author vituslehner 04.07.17
  */
 @Service
-public class UserService extends CacheService<User, String> {
+public class UserService extends AbstractCacheService<User, String> {
 
     @Autowired
     public UserService(TimingService timingService) {
@@ -29,5 +30,9 @@ public class UserService extends CacheService<User, String> {
             return newUser;
         }
         return existingUser.get();
+    }
+
+    public List<User> getCurrentUsers() {
+        return getAll();
     }
 }

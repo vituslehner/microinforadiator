@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 /**
  * @author vituslehner 04.07.17
  */
-public abstract class CacheService<C extends Cachable, Identifier> {
+public abstract class AbstractCacheService<C extends Cachable, Identifier> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -26,7 +26,7 @@ public abstract class CacheService<C extends Cachable, Identifier> {
     private final List<C> cachables = new ArrayList<>();
 
     @Autowired
-    protected CacheService(TimingService timingService) {
+    protected AbstractCacheService(TimingService timingService) {
         this.timingService = timingService;
     }
 
@@ -39,6 +39,10 @@ public abstract class CacheService<C extends Cachable, Identifier> {
         Preconditions.checkNotNull(identifier, "Cachable identifier must not be null for lookup.");
 
         return cachables.stream().filter(filter).findFirst();
+    }
+
+    protected List<C> getAll() {
+        return cachables;
     }
 
 }
