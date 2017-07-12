@@ -49,8 +49,7 @@ public class BroadcastingService implements MqttListener {
         try {
             if (message.getClassName() != null
                     && message.getClassName().startsWith("org.sociotech.urbanlifeplus.microinforadiator.model.event.")) {
-                Class sourceClass = Class.forName(message.getClassName());
-                String jsonData = objectMapper.writeValueAsString(message.getRawData());
+                Class<?> sourceClass = Class.forName(message.getClassName());
                 Object event = objectMapper.readValue(message.getRawData().toString(), sourceClass);
                 reactorEventBus.post(event);
             } else {
