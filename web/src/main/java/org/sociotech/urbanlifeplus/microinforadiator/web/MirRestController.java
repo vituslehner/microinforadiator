@@ -6,15 +6,15 @@ package org.sociotech.urbanlifeplus.microinforadiator.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sociotech.urbanlifeplus.microinforadiator.CoreConfiguration;
+import org.sociotech.urbanlifeplus.microinforadiator.service.UserService;
+import org.sociotech.urbanlifeplus.microinforadiator.web.dto.MirDeviceStatus;
 import org.sociotech.urbanlifeplus.microinforadiator.web.dto.Status;
 import org.sociotech.urbanlifeplus.microinforadiator.web.simulation.ProximitySimulation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author vituslehner 03.07.17
@@ -27,9 +27,14 @@ public class MirRestController {
 
     private final ProximitySimulation proximitySimulation;
 
+    private final CoreConfiguration coreConfiguration;
+    private final UserService userService;
+
     @Autowired
-    public MirRestController(ProximitySimulation proximitySimulation) {
+    public MirRestController(ProximitySimulation proximitySimulation, CoreConfiguration coreConfiguration, UserService userService) {
         this.proximitySimulation = proximitySimulation;
+        this.coreConfiguration = coreConfiguration;
+        this.userService = userService;
     }
 
     @RequestMapping("/proximity/{proximity}")
@@ -38,6 +43,13 @@ public class MirRestController {
         proximitySimulation.notify(userId, proximity);
 
         return new ResponseEntity<Status>(new Status("Notified listeners about near user."), HttpStatus.OK);
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<MirDeviceStatus> getStatus() {
+        MirDeviceStatus status = new MirDeviceStatus("", coreConfiguration.getId(), userService.getCurrentUsers());
+
+        return new ResponseEntity<>(status, HttpStatus.OK);
     }
 
 }

@@ -28,4 +28,12 @@ public class MirDeviceStatus extends Status {
         this.id = id;
         this.currentUsers = currentUsers;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public List<User> getCurrentUsers() {
+        return currentUsers;
+    }
 }
