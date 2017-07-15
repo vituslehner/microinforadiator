@@ -48,7 +48,8 @@ public class BroadcastingService implements MqttListener {
     public void handleMessage(MqttMessage message) {
         try {
             if (message.getClassName() != null
-                    && message.getClassName().startsWith("org.sociotech.urbanlifeplus.microinforadiator.model.event.")) {
+                    && message.getClassName().startsWith("org.sociotech.urbanlifeplus.microinforadiator.model.event.")
+                    && !Objects.equals(message.getMirSourceId(), coreConfiguration.getId())) {
                 Class<?> sourceClass = Class.forName(message.getClassName());
                 Object event = objectMapper.readValue(message.getRawData().toString(), sourceClass);
                 reactorEventBus.post(event);
