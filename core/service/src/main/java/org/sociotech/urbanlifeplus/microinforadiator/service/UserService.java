@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * Service to request and update user data (from and to the backend).
+ *
  * @author vituslehner 04.07.17
  */
 @Service

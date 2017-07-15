@@ -21,6 +21,10 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
+ * Broadcasting service receives messages from MQTT bus and generates and submits reactor events from it.
+ * Also, events that were submitted to the reactor locally are submitted to the MQTT bus to be broadcasted
+ * to other listeners.
+ *
  * @author vituslehner 12.07.17
  */
 @Service
@@ -44,6 +48,11 @@ public class BroadcastingService implements MqttListener {
         this.mqttService.setListener(this);
     }
 
+    /**
+     * Handle messages coming from MQTT bus and convert and submit them to reactor event bus.
+     *
+     * @param message the MQTT message coming in
+     */
     @Override
     public void handleMessage(MqttMessage message) {
         try {
@@ -63,6 +72,11 @@ public class BroadcastingService implements MqttListener {
         }
     }
 
+    /**
+     * Handle events from the reactor event bus and broadcast them via MQTT if their source is the local application.
+     *
+     * @param event the reactor event that might be broadcasted
+     */
     @Subscribe
     public void broadcastReactorEvent(ReactorEvent event) {
         try {
@@ -84,6 +98,11 @@ public class BroadcastingService implements MqttListener {
         }
     }
 
+    /**
+     * The topic to broadcast events to based on the local MIR id.
+     *
+     * @return the MQTT topic to broadcast to
+     */
     public String getSourceTopic() {
         return "ulp/mir/" + coreConfiguration.getId();
     }

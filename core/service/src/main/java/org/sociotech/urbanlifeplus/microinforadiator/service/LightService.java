@@ -15,6 +15,9 @@ import java.util.HashSet;
 import java.util.Optional;
 
 /**
+ * Service to update the lighting interfaces. Light colors applied to this service are automatically
+ * broadcasted to all light interfaces.
+ *
  * @author vituslehner 03.07.17
  */
 @Service
@@ -29,22 +32,40 @@ public class LightService {
         this.currentColors = new HashSet<>();
     }
 
+    /**
+     * Add a color to the lights.
+     *
+     * @param color the color
+     */
     public void addColor(LightColor color) {
         currentColors.add(color);
         notifyInterfaces();
     }
 
+    /**
+     * Remove a color from the lights.
+     *
+     * @param color the color
+     */
     public void removeColor(LightColor color) {
         currentColors.remove(color);
         notifyInterfaces();
     }
 
+    /**
+     * Returns an {@link Optional} that contains a color that is not in use yet.
+     *
+     * @return a spare color
+     */
     public Optional<LightColor> acquireSpareColor() {
         return Arrays.stream(LightColor.values())
                 .filter(lightColor -> !currentColors.contains(lightColor))
                 .findFirst();
     }
 
+    /**
+     * Notify light interfaces about changes.
+     */
     private void notifyInterfaces() {
         lightInterfaces.forEach(lightInterface -> lightInterface.setColors(currentColors));
     }

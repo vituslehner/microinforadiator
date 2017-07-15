@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
+ * Utility reactor to log all reactor events.
+ *
  * @author vituslehner 12.07.17
  */
 @Service

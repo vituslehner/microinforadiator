@@ -21,6 +21,9 @@ import static org.sociotech.urbanlifeplus.microinforadiator.interfaces.proximity
 import static org.sociotech.urbanlifeplus.microinforadiator.interfaces.proximity.Proximity.NEAR;
 
 /**
+ * Reactor that listens to internal and external proximity events and accordingly updates interfaces
+ * to navigate users to their destinations.
+ *
  * @author vituslehner 04.07.17
  */
 @Service
@@ -38,6 +41,12 @@ public class NavigationReactor {
         this.reactorEventBus.register(this);
     }
 
+    /**
+     * Listen to reactor proximity events and update light and arrow interfaces accordingly.
+     * Uses e.g. Google Maps APIs to calculate route information and identifier location on route.
+     *
+     * @param proximityEvent the proximity event
+     */
     @Subscribe
     public void proximityEvent(UserProximityEvent proximityEvent) {
         LOGGER.debug("Receiving reactor proximity event: {}", proximityEvent);
@@ -51,6 +60,12 @@ public class NavigationReactor {
         }
     }
 
+    /**
+     * Gets the user color or creates a new one if not done yet.
+     *
+     * @param user the user to create a color for
+     * @return the user color
+     */
     private LightColor getOrCreateUserColor(User user) {
         if (user.getColor() == null) {
             LightColor newColor = lightService.acquireSpareColor()

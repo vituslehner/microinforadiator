@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
+ * Service that delegates changes in user proximity to the reactor event bus. E.g. if a user comes near to this
+ * device using iBeacon, an event containing the user data is pushed to the bus.
+ *
  * @author vituslehner 03.07.17
  */
 @Service
@@ -42,7 +45,12 @@ public class ProximityService {
         this.interfaceEventBus.register(this);
     }
 
-
+    /**
+     * Listens to nearing users on proximity interfaces and submit a reactor event with retrieved
+     * user information to the reactor event bus.
+     *
+     * @param interfaceEvent the interface event that triggers the action
+     */
     @Subscribe
     public void update(ProximityEvent interfaceEvent) {
         LOGGER.debug("INTRFC: Received proximity event: {}", interfaceEvent);
