@@ -18,7 +18,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * Broadcasting service receives messages from MQTT bus and generates and submits reactor events from it.
@@ -56,19 +60,20 @@ public class BroadcastingService implements MqttListener {
     @Override
     public void handleMessage(MqttMessage message) {
         try {
-            if (message.getClassName() != null
-                    && message.getClassName().startsWith("org.sociotech.urbanlifeplus.microinforadiator.model.event.")
-                    && !Objects.equals(message.getMirSourceId(), coreConfiguration.getId())) {
-                Class<?> sourceClass = Class.forName(message.getClassName());
-                Object event = objectMapper.readValue(message.getRawData().toString(), sourceClass);
+            validateMessage(message);
+            if (!isLocalMirInPath(message)) {
+                if (message.getRecursionDepth() > 0) {
+                    redirectMessage(message);
+                }
+                Object event = deserializeObject(message.getRawData(), message.getClassName());
                 reactorEventBus.post(event);
-            } else {
-                LOGGER.error("Bad deserialization class name given! Possible HACKING attempt! Message: {}", message);
             }
         } catch (ClassNotFoundException e) {
             LOGGER.error("Could not find class to deserialize JSON message: {}", message);
         } catch (IOException e) {
             LOGGER.error("Could not parse JSON data: {}", message, e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error("Could not deserialize content of message: {}", message, e);
         }
     }
 
@@ -80,16 +85,9 @@ public class BroadcastingService implements MqttListener {
     @Subscribe
     public void broadcastReactorEvent(ReactorEvent event) {
         try {
-            if (Objects.equals(event.getMirId(), coreConfiguration.getId())) {
+            if (isLocalEvent(event)) {
                 LOGGER.debug("Broadcasting reactor event: {}", event);
-                String jsonData = objectMapper.writeValueAsString(event);
-                MqttMessage message = new MqttMessageBuilder()
-                        .setRawData(jsonData)
-                        .setClassName(event.getClass().getName())
-                        .setSourceMirId(coreConfiguration.getId())
-                        .setTopic(getSourceTopic())
-                        .build();
-                mqttService.sendMessage(message);
+                convertAndSendEvent(event);
             }
         } catch (JsonProcessingException e) {
             LOGGER.error("Could not generate JSON from event: {}", event, e);
@@ -105,5 +103,57 @@ public class BroadcastingService implements MqttListener {
      */
     public String getSourceTopic() {
         return "ulp/mir/" + coreConfiguration.getId();
+    }
+
+    private Object deserializeObject(Object rawData, String className) throws ClassNotFoundException, IOException {
+        if (!className.startsWith("org.sociotech.urbanlifeplus.microinforadiator.model.event.")) {
+            throw new IllegalArgumentException("Cannot deserialize object. Illegal package (possible hacking attempt). Class name: " + className);
+        }
+
+        Class<?> sourceClass = Class.forName(className);
+        return objectMapper.readValue(rawData.toString(), sourceClass);
+    }
+
+    private void validateMessage(MqttMessage message) {
+        checkNotNull(message.getMirSourceId(), "mirSourceId must not be null.");
+        checkNotNull(message.getMirPath(), "mirPath must not be null.");
+        checkNotNull(message.getRawData(), "rawData must not be null.");
+        checkNotNull(message.getTopic(), "topic must not be null.");
+        checkNotNull(message.getClassName(), "className must not be null.");
+    }
+
+    private boolean isLocalMirInPath(MqttMessage message) {
+        return message.getMirPath().stream().anyMatch(p -> Objects.equals(p, coreConfiguration.getId()));
+    }
+
+    private void redirectMessage(MqttMessage message) {
+        List<String> updatedMirPath = message.getMirPath();
+        updatedMirPath.add(coreConfiguration.getId());
+        MqttMessage redirectedMessage = new MqttMessageBuilder()
+                .setRawData(message.getRawData())
+                .setClassName(message.getClassName())
+                .setMirSourceId(message.getMirSourceId())
+                .setTopic(getSourceTopic())
+                .setMirPath(updatedMirPath)
+                .setRecursionDepth(message.getRecursionDepth() - 1)
+                .build();
+        mqttService.sendMessage(redirectedMessage);
+    }
+
+    private void convertAndSendEvent(ReactorEvent event) throws JsonProcessingException {
+        String jsonData = objectMapper.writeValueAsString(event);
+        MqttMessage message = new MqttMessageBuilder()
+                .setRawData(jsonData)
+                .setClassName(event.getClass().getName())
+                .setMirSourceId(coreConfiguration.getId())
+                .setTopic(getSourceTopic())
+                .setMirPath(newArrayList(coreConfiguration.getId()))
+                .setRecursionDepth(coreConfiguration.getRecursionDepth())
+                .build();
+        mqttService.sendMessage(message);
+    }
+
+    private boolean isLocalEvent(ReactorEvent event) {
+        return Objects.equals(event.getMirId(), coreConfiguration.getId());
     }
 }

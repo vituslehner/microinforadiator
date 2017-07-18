@@ -32,4 +32,11 @@ public class CoreConfiguration {
     public String getId() {
         return id;
     }
+
+    @Value("${ULP_RECURSION_DEPTH:3}")
+    private int recursionDepth;
+
+    public int getRecursionDepth() {
+        return recursionDepth;
+    }
 }

@@ -46,7 +46,11 @@ public class MqttService implements MessageHandler {
 
     public void sendMessage(MqttMessage message) {
         try {
-            MqttPayload payload = new MqttPayload(message.getMirSourceId(), message.getClassName(), message.getRawData());
+            MqttPayload payload = new MqttPayload(message.getMirSourceId(),
+                    message.getClassName(),
+                    message.getRawData(),
+                    message.getMirPath(),
+                    message.getRecursionDepth());
             String jsonPayload = jsonMapper.writeValueAsString(payload);
             mqttGateway.send(jsonPayload, message.getTopic());
         } catch (IOException e) {
@@ -63,7 +67,9 @@ public class MqttService implements MessageHandler {
                     .setRawData(payload.getRawData())
                     .setClassName(payload.getClassName())
                     .setTopic((String) message.getHeaders().get(MqttHeaders.TOPIC))
-                    .setSourceMirId(payload.getMirSourceId())
+                    .setMirSourceId(payload.getMirSourceId())
+                    .setMirPath(payload.getMirPath())
+                    .setRecursionDepth(payload.getRecursionDepth())
                     .build();
             listener.handleMessage(inboundMessage);
         } catch (IOException e) {
