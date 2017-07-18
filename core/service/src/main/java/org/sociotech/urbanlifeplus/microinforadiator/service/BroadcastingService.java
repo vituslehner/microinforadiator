@@ -102,7 +102,7 @@ public class BroadcastingService implements MqttListener {
      * @return the MQTT topic to broadcast to
      */
     public String getSourceTopic() {
-        return "ulp/mir/" + coreConfiguration.getId();
+        return "ulp/mir/" + coreConfiguration.getMirId();
     }
 
     private Object deserializeObject(Object rawData, String className) throws ClassNotFoundException, IOException {
@@ -123,12 +123,12 @@ public class BroadcastingService implements MqttListener {
     }
 
     private boolean isLocalMirInPath(MqttMessage message) {
-        return message.getMirPath().stream().anyMatch(p -> Objects.equals(p, coreConfiguration.getId()));
+        return message.getMirPath().stream().anyMatch(p -> Objects.equals(p, coreConfiguration.getMirId()));
     }
 
     private void redirectMessage(MqttMessage message) {
         List<String> updatedMirPath = message.getMirPath();
-        updatedMirPath.add(coreConfiguration.getId());
+        updatedMirPath.add(coreConfiguration.getMirId());
         MqttMessage redirectedMessage = new MqttMessageBuilder()
                 .setRawData(message.getRawData())
                 .setClassName(message.getClassName())
@@ -145,15 +145,15 @@ public class BroadcastingService implements MqttListener {
         MqttMessage message = new MqttMessageBuilder()
                 .setRawData(jsonData)
                 .setClassName(event.getClass().getName())
-                .setMirSourceId(coreConfiguration.getId())
+                .setMirSourceId(coreConfiguration.getMirId())
                 .setTopic(getSourceTopic())
-                .setMirPath(newArrayList(coreConfiguration.getId()))
+                .setMirPath(newArrayList(coreConfiguration.getMirId()))
                 .setRecursionDepth(coreConfiguration.getRecursionDepth())
                 .build();
         mqttService.sendMessage(message);
     }
 
     private boolean isLocalEvent(ReactorEvent event) {
-        return Objects.equals(event.getMirId(), coreConfiguration.getId());
+        return Objects.equals(event.getMirId(), coreConfiguration.getMirId());
     }
 }

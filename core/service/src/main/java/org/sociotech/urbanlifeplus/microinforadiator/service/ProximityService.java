@@ -56,7 +56,7 @@ public class ProximityService {
         LOGGER.debug("INTRFC: Received proximity event: {}", interfaceEvent);
         User user = userService.findUserbyId(interfaceEvent.getUserId());
 
-        UserProximityEvent reactorEvent = new UserProximityEvent(user, coreConfiguration.getId(), interfaceEvent.getProximity());
+        UserProximityEvent reactorEvent = new UserProximityEvent(user, coreConfiguration.getMirId(), interfaceEvent.getProximity());
         reactorEventBus.post(reactorEvent);
     }
 

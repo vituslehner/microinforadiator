@@ -37,7 +37,7 @@ public class MirWebController {
 
     @RequestMapping("/overview")
     public String overview(Model model) {
-        model.addAttribute("mir_id", coreConfiguration.getId());
+        model.addAttribute("mir_id", coreConfiguration.getMirId());
 
         if (webConfiguration.isMaster()) {
             model.addAttribute("message", " | This MIR is not configured to act as web node.");

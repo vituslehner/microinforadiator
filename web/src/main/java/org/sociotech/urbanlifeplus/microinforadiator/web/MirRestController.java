@@ -47,7 +47,7 @@ public class MirRestController {
 
     @GetMapping("/status")
     public ResponseEntity<MirDeviceStatus> getStatus() {
-        MirDeviceStatus status = new MirDeviceStatus("", coreConfiguration.getId(), userService.getCurrentUsers());
+        MirDeviceStatus status = new MirDeviceStatus("", coreConfiguration.getMirId(), userService.getCurrentUsers());
 
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
