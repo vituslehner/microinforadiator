@@ -2,7 +2,7 @@
  * Copyright (c) 2017. Vitus Lehner. UrbanLife+. Universität der Bundeswehr München.
  */
 
-package org.sociotech.urbanlifeplus.microinforadiator.mqtt;
+package org.sociotech.urbanlifeplus.microinforadiator.mqtt.internal;
 
 import org.springframework.integration.annotation.MessagingGateway;
 import org.springframework.integration.mqtt.support.MqttHeaders;

@@ -6,6 +6,7 @@ package org.sociotech.urbanlifeplus.microinforadiator.mqtt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
+import org.sociotech.urbanlifeplus.microinforadiator.mqtt.internal.MqttGateway;
 import org.sociotech.urbanlifeplus.microinforadiator.mqtt.internal.MqttPayload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.ServiceActivator;

@@ -10,6 +10,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sociotech.urbanlifeplus.microinforadiator.BroadcastingConfiguration;
 import org.sociotech.urbanlifeplus.microinforadiator.CoreConfiguration;
 import org.sociotech.urbanlifeplus.microinforadiator.model.event.ReactorEvent;
 import org.sociotech.urbanlifeplus.microinforadiator.mqtt.*;
@@ -38,13 +39,19 @@ public class BroadcastingService implements MqttListener {
 
     private final MqttService mqttService;
     private final CoreConfiguration coreConfiguration;
+    private final BroadcastingConfiguration broadcastingConfiguration;
     private final EventBus reactorEventBus;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public BroadcastingService(MqttService mqttService, CoreConfiguration coreConfiguration, @Qualifier("reactorEventBus") EventBus reactorEventBus, ObjectMapper objectMapper) {
+    public BroadcastingService(MqttService mqttService,
+                               CoreConfiguration coreConfiguration,
+                               BroadcastingConfiguration broadcastingConfiguration,
+                               @Qualifier("reactorEventBus") EventBus reactorEventBus,
+                               ObjectMapper objectMapper) {
         this.mqttService = mqttService;
         this.coreConfiguration = coreConfiguration;
+        this.broadcastingConfiguration = broadcastingConfiguration;
         this.reactorEventBus = reactorEventBus;
         this.objectMapper = objectMapper;
 
@@ -96,15 +103,6 @@ public class BroadcastingService implements MqttListener {
         }
     }
 
-    /**
-     * The topic to broadcast events to based on the local MIR id.
-     *
-     * @return the MQTT topic to broadcast to
-     */
-    public String getSourceTopic() {
-        return "ulp/mir/" + coreConfiguration.getMirId();
-    }
-
     private Object deserializeObject(Object rawData, String className) throws ClassNotFoundException, IOException {
         if (!className.startsWith("org.sociotech.urbanlifeplus.microinforadiator.model.event.")) {
             throw new IllegalArgumentException("Cannot deserialize object. Illegal package (possible hacking attempt). Class name: " + className);
@@ -133,7 +131,7 @@ public class BroadcastingService implements MqttListener {
                 .setRawData(message.getRawData())
                 .setClassName(message.getClassName())
                 .setMirSourceId(message.getMirSourceId())
-                .setTopic(getSourceTopic())
+                .setTopic(broadcastingConfiguration.getSourceTopic())
                 .setMirPath(updatedMirPath)
                 .setRecursionDepth(message.getRecursionDepth() - 1)
                 .build();
@@ -146,7 +144,7 @@ public class BroadcastingService implements MqttListener {
                 .setRawData(jsonData)
                 .setClassName(event.getClass().getName())
                 .setMirSourceId(coreConfiguration.getMirId())
-                .setTopic(getSourceTopic())
+                .setTopic(broadcastingConfiguration.getSourceTopic())
                 .setMirPath(newArrayList(coreConfiguration.getMirId()))
                 .setRecursionDepth(coreConfiguration.getRecursionDepth())
                 .build();

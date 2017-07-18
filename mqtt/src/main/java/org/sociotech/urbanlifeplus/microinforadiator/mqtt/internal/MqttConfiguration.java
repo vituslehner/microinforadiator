@@ -2,8 +2,10 @@
  * Copyright (c) 2017. Vitus Lehner. UrbanLife+. Universität der Bundeswehr München.
  */
 
-package org.sociotech.urbanlifeplus.microinforadiator.mqtt;
+package org.sociotech.urbanlifeplus.microinforadiator.mqtt.internal;
 
+import org.sociotech.urbanlifeplus.microinforadiator.mqtt.MqttDynamicConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +38,9 @@ public class MqttConfiguration {
     @Value("${MQTT_BROKER_PASSWORD}")
     private String brokerPassword;
 
+    @Autowired
+    private MqttDynamicConfiguration dynamicConfiguration;
+
     @Bean
     public MqttPahoClientFactory mqttClientFactory() {
         DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
@@ -45,8 +50,6 @@ public class MqttConfiguration {
         return factory;
     }
 
-    // Inbound
-
     @Bean
     public MessageChannel mqttInputChannel() {
         return new DirectChannel();
@@ -55,15 +58,15 @@ public class MqttConfiguration {
     @Bean
     public MessageProducer mqttInbound() {
         MqttPahoMessageDrivenChannelAdapter adapter =
-                new MqttPahoMessageDrivenChannelAdapter("mir_consumer_client", mqttClientFactory(), "ulp/mir/#");
+                new MqttPahoMessageDrivenChannelAdapter("mir_consumer_client_" + dynamicConfiguration.getMqttId(),
+                        mqttClientFactory(),
+                        dynamicConfiguration.getTopicSubscriptions().toArray(new String[]{}));
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
         adapter.setOutputChannel(mqttInputChannel());
         return adapter;
     }
-
-    // Outbound
 
     @Bean
     public MessageChannel mqttOutboundChannel() {
@@ -73,9 +76,9 @@ public class MqttConfiguration {
     @Bean
     @ServiceActivator(inputChannel = "mqttOutboundChannel")
     public MessageHandler mqttOutbound() {
-        MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler("mir_producer_client", mqttClientFactory());
+        MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler("mir_producer_client_" + dynamicConfiguration.getMqttId(), mqttClientFactory());
         messageHandler.setAsync(true);
-        messageHandler.setDefaultTopic("ulp/mir");
+        messageHandler.setDefaultTopic(dynamicConfiguration.getDefaultPublishingTopic());
         return messageHandler;
     }
 
