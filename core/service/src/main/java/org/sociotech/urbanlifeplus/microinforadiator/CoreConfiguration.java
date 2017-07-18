@@ -27,10 +27,10 @@ public class CoreConfiguration {
     }
 
     @Value("${ULP_MIR_ID}")
-    private String id;
+    private String mirId;
 
-    public String getId() {
-        return id;
+    public String getMirId() {
+        return mirId;
     }
 
     @Value("${ULP_RECURSION_DEPTH:3}")
