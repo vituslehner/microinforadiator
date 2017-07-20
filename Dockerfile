@@ -21,7 +21,10 @@ ENV GRADLE_VERSION 3.5
 RUN wget "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" && \
     unzip "gradle-${GRADLE_VERSION}-bin.zip" -d /usr/src/ && \
     rm "gradle-${GRADLE_VERSION}-bin.zip" && \
-    ln -s "/usr/src/gradle-${GRADLE_VERSION}/bin/gradle" /usr/bin/gradle
+    ln -s "/usr/src/gradle-${GRADLE_VERSION}/bin/gradle" /usr/bin/gradle && \
+    mkdir -p /data/gradle && \
+    ln -s /data/gradle /root/.gradle
+
 
 
 #RUN apt-get update && \
@@ -44,8 +47,6 @@ RUN wget "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin
 #        && mv "gradle-${GRADLE_VERSION}" "${GRADLE_HOME}/"
 #
 #ENV PATH=${PATH}:${GRADLE_HOME}/bin
-
-VOLUME /root/.gradle
 
 ADD . /opt/ulp-mir-source
 WORKDIR /opt/ulp-mir-source
