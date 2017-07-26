@@ -10,8 +10,8 @@ MAINTAINER Vitus Lehner <student@vitus-lehner.de>
 
 COPY raspberrypi.gpg.key /key/
 #RUN echo 'deb http://archive.raspberrypi.org/debian/ jessie main' >> /etc/apt/sources.list.d/raspi.list && \
-RUN    echo oracle-java8-jdk shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
-    apt-key add /key/raspberrypi.gpg.key
+RUN    echo oracle-java8-jdk shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+#    apt-key add /key/raspberrypi.gpg.key
 
 RUN apt-get update && \
     apt-get -y install oracle-java8-jdk \
@@ -19,7 +19,7 @@ RUN apt-get update && \
         ca-certificates \
         python python-dev \
         sense-hat \
-        bluetooth bluez bluez-firmware bluez-utils pi-bluetooth && \
+        bluetooth bluez bluez-firmware pi-bluetooth && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV GRADLE_VERSION 3.5
