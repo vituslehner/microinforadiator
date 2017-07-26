@@ -19,7 +19,7 @@ RUN apt-get update && \
         ca-certificates \
         python python-dev \
         sense-hat \
-        bluetooth bluez bluez-firmware pi-bluetooth && \
+        bluetooth bluez bluez-firmware bluez-hcidump pi-bluetooth && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV GRADLE_VERSION 3.5
@@ -58,7 +58,7 @@ WORKDIR /opt/ulp-mir-source
 
 #RUN javac Test.java && ls -la && java Test &&
 CMD hciattach /dev/ttyAMA0 bcm43xx 921600 noflow - && \
-    chmod +x ./ble_scan.sh && ./ble_scan.sh && \
+    chmod +x ./ble_scan.sh && hciconfig hci0 up && ./ble_scan.sh && \
     gradle --no-daemon clean build bootRun
 
 #CMD gradle bootRun
