@@ -1,4 +1,4 @@
-FROM resin/rpi-raspbian:jessie
+FROM resin/rpi-raspbian:latest
 MAINTAINER Vitus Lehner <student@vitus-lehner.de>
 
 #RUN dpkg --purge --force-depends ca-certificates-java && \
@@ -14,7 +14,12 @@ RUN echo 'deb http://archive.raspberrypi.org/debian/ wheezy main' >> /etc/apt/so
     apt-key add /key/raspberrypi.gpg.key
 
 RUN apt-get update && \
-    apt-get -y install oracle-java8-jdk wget unzip ca-certificates python python-dev sense-hat && \
+    apt-get -y install oracle-java8-jdk \
+        wget unzip \
+        ca-certificates \
+        python python-dev \
+        sense-hat \
+        bluetooth bluez bluez-firmware bluez-utils pi-bluetooth && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV GRADLE_VERSION 3.5
