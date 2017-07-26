@@ -37,5 +37,6 @@ while True:
     c = colors[i]
     #print 'Showing color ', c, '.'
     sense.show_letter('<', (255, 255, 255), getColorTuple(c))
+    sense.low_light = True
     sleep(2)
     i = i + 1
