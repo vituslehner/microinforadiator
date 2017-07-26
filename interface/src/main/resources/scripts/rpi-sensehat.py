@@ -1,8 +1,7 @@
 import sys
-
+from pprint import pprint
 from sense_hat import SenseHat
 from time import sleep
-from pprint import pprint
 
 sense = SenseHat()
 
@@ -37,6 +36,6 @@ while True:
         i = 0
     c = colors[i]
     #print 'Showing color ', c, '.'
-    sense.show_letter('V', (255, 255, 255), getColorTuple(c))
+    sense.show_letter('<', (255, 255, 255), getColorTuple(c))
     sleep(2)
     i = i + 1
