@@ -58,7 +58,7 @@ WORKDIR /opt/ulp-mir-source
 
 #RUN javac Test.java && ls -la && java Test &&
 CMD hciattach /dev/ttyAMA0 bcm43xx 921600 noflow - && \
-    chmod +x ./ble_scan.sh && hciconfig hci0 up && ./ble_scan.sh && \
+    chmod +x ./ble_scan.sh && hciconfig hci0 up && \
     gradle --no-daemon clean build bootRun
 
 #CMD gradle bootRun
