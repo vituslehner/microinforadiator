@@ -92,7 +92,7 @@ public class BroadcastingService implements MqttListener {
     @Subscribe
     public void broadcastReactorEvent(ReactorEvent event) {
         try {
-            if (isLocalEvent(event)) {
+            if (isLocalEvent(event) && coreConfiguration.getRecursionDepth() > 0) {
                 LOGGER.debug("Broadcasting reactor event: {}", event);
                 convertAndSendEvent(event);
             }
@@ -146,11 +146,19 @@ public class BroadcastingService implements MqttListener {
                 .setMirSourceId(coreConfiguration.getMirId())
                 .setTopic(broadcastingConfiguration.getSourceTopic())
                 .setMirPath(newArrayList(coreConfiguration.getMirId()))
-                .setRecursionDepth(coreConfiguration.getRecursionDepth())
+                .setRecursionDepth(coreConfiguration.getRecursionDepth() - 1)
                 .build();
         mqttService.sendMessage(message);
     }
 
+    /**
+     * Returns true if the origin of this event was the local MIR. Would be false if this
+     * reactor event was originally broadcasted by a different MIR but submitted into the
+     * reactor.
+     *
+     * @param event the event to check
+     * @return true if event's origin is local
+     */
     private boolean isLocalEvent(ReactorEvent event) {
         return Objects.equals(event.getMirId(), coreConfiguration.getMirId());
     }
