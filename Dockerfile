@@ -57,6 +57,8 @@ ADD . /opt/ulp-mir-source
 WORKDIR /opt/ulp-mir-source
 
 #RUN javac Test.java && ls -la && java Test &&
-CMD gradle --no-daemon clean build bootRun
+CMD hciattach /dev/ttyAMA0 bcm43xx 921600 noflow - && \
+    chmod +x ./ble_scan.sh && ./ble_scan.sh && \
+    gradle --no-daemon clean build bootRun
 
 #CMD gradle bootRun
