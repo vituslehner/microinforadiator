@@ -14,7 +14,10 @@ deploy:
   provider: releases
   api_key:
     secure: O5G/TXws6ihBJ0hUnbqvaxqfbnqHwdpw+R0J02LAutKSPjZiNeIrXVdjsmsNuLEX5dtV77a6ajBUVOYWcZXasEVZmowOyPmoY3YXbg6NNmfx57TQfnNxRnlClT04bodn1RHphmaIP8eKBaJoFuMwVekgjOei7UwUdEOfgAkDodWkeCqOz52OwV0VWIwDd1RyzIfqTvy/pvzfC85TOp5RPtfFI+q4CsdvnVvirAn9NkG5LhJyxboE+mz1VevX0aLjcwJ6yb5hYAYPynFkSidLBxCRgCxuVXle6Ji3LX2eYR7I91z+mvf1aRS1SW1V73axE01mGO+BUlsrHy57Bl3Lm9mXI3rMrIPgsknFmvOtUqdNdsIFIwuCFXEpEmZgssRX4Hem42y7Cc6csWhl9v3GnASllwqTf4M55auw9srZ5Vmqn8BC5TmaDPY14pV4/U9k0RcLKAMulVvX0ETQ47sEL1CJQ46Ona+pHjwMDlmf31SguHodA491O3FczkBaz92870baP32+gcaE82UBqQuCwW6hKyGd+Bzly1iQ789tLYDCOI9HllnMtNnX7S4iTTDMtTL5wb6SXY4bDzC+tQXy8CaKp4abFlZd3j/UeesyTlqJq99CbfiQB8GTHWMat1lZ8AglD0PwFO0IL9vbED2j/Up1isx5bH0QXqPphVigZdQ=
-  file: build/libs/ulp_microinforadiator-*.jar
+  file_glob: true
+  file:
+    - $TRAVIS_BUILD_DIR/build/distributions/ulp_microinforadiator-*.zip
+    - $TRAVIS_BUILD_DIR/build/distributions/ulp_microinforadiator-*.tar
   skip_cleanup: true
   on:
     repo: vituslehner/ulp_microinforadiator

@@ -4,4 +4,4 @@
 
 include ':commons', ':interface', ':web', ':core', ':core:service', ':core:reactor', ':core:model', 'mqtt'
 
-rootProject.name = 'mikroinfostrahler'
+rootProject.name = 'ulp_microinforadiator'
