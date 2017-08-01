@@ -72,7 +72,7 @@ task wrapper(type: Wrapper) {
 }
 
 jar {
-    baseName = 'ulp-mikroinfostrahler'
+    baseName = 'ulp_microinforadiator'
     version = project.version
     manifest {
         attributes 'Main-Class': mainClassNameProperty
