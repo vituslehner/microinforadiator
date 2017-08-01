@@ -1,22 +1,49 @@
-# ULP Mikroinforationsstrahler
+# UrbanLife+ MicroInfoRadiators
 
-Die Mikroinformationsstrahler der UrbanLife+ Projekts sind kleine "Dinge des Internets" (IoT),
-die mit Sensoren und Aktoren ausgestattet sind und auf smarte Weise und mit
-natürlicher und impliziter Interaktion Passanten im urbanen Raum unterstützen sollen.
+## Background
+
+UrbanLife+ is a project developing information radiators for urban areas with the goal of
+supporting the elderly in their daily life. Besides macro and mini information screens
+there are also micro information radiators being developed which are the subject of this
+repository.
+
+MicroInfoRadiators are only equipped with light, audio and Bluetooth components. They do
+not have any displays. Therefor, this concept and software is based on ideas about
+visual and acoustic signals as well as conversational speech interfaces.
+iBeacon technology is being used for implicit user detection.
+
+This software is developed for a Raspberry Pi prototype.
+
+## Features
+
+The following software, standards and technology is being used in this repository:
+
+- Bluetooth LE / iBeacons
+- MQTT
+- Docker
+- Resin.io
+- Java
+- Gradle & Gradle Wrapper
+- Python & Bash scripts
+- Spring Boot
+    - Web (+ Thymeleef, Actuator, ...)
+    - Integrations (MQTT)
+- Raspbian
+- BlueZ
+- Raspberry Pi (+ Sense HAT Module)
 
 ## Build
 
-Um das Projekt zu kompilieren und zu bauen, ins Projektverzeichnis wechseln und folgenden Befehl ausführen:
-
+To build this project, check out the repo, change into the project directory and run:
 ```
 ./gradlew clean build
 ```
-Unter Windows ist das gradlew.bat Skript entsprechend zu verwenden.
 
-## Ausführen
+## Run
 
-Zum Starten der Anwendung zunächst den Build ausführen, anschließend:
+To run the Spring Boot application (after build):
 
 ```
-./gradlew run
+./gradlew bootRun
 ```
+Note: Certain system properties or environment variables need to be configured.
