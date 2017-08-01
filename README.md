@@ -1,4 +1,6 @@
-# UrbanLife+ MicroInfoRadiators
+# UrbanLife+ MicroInfoRadiators 
+
+[![Build Status](https://travis-ci.org/vituslehner/ulp_microinforadiator.svg?branch=master)](https://travis-ci.org/vituslehner/ulp_microinforadiator)
 
 ## Background
 
