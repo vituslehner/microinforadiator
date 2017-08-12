@@ -9,13 +9,13 @@ package org.sociotech.urbanlifeplus.microinforadiator.model;
  */
 public class Cachable {
 
-    private long lifetime;
+    private long timeToLive;
 
-    public long getLifetime() {
-        return lifetime;
+    public long getTimeToLive() {
+        return timeToLive;
     }
 
-    public void setLifetime(long lifetime) {
-        this.lifetime = lifetime;
+    public void setTimeToLive(long timeToLive) {
+        this.timeToLive = timeToLive;
     }
 }

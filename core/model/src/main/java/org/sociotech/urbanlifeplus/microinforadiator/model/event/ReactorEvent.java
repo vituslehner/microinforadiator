@@ -12,18 +12,18 @@ import org.sociotech.urbanlifeplus.microinforadiator.model.User;
 public abstract class ReactorEvent {
 
     private final User user;
-    private final String mirId;
+    private final String sourceMirId;
 
-    public ReactorEvent(User user, String mirId) {
+    public ReactorEvent(User user, String sourceMirId) {
         this.user = user;
-        this.mirId = mirId;
+        this.sourceMirId = sourceMirId;
     }
 
     public User getUser() {
         return user;
     }
 
-    public String getMirId() {
-        return mirId;
+    public String getSourceMirId() {
+        return sourceMirId;
     }
 }

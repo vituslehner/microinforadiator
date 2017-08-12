@@ -34,7 +34,7 @@ public class UserProximityEvent extends ReactorEvent {
         return MoreObjects.toStringHelper(this)
                 .add("proximity", proximity)
                 .add("user", getUser())
-                .add("mirId", getMirId())
+                .add("mirId", getSourceMirId())
                 .toString();
     }
 }
