@@ -50,6 +50,13 @@ public class CoreConfiguration {
         return neighbouredMirsRaw;
     }
 
+    @Value("${ULP_PUSH_STATUS}")
+    private boolean pushStatus;
+
+    public boolean getPushStatus() {
+        return pushStatus;
+    }
+
     private List<String> neighbouredMirs;
 
     public List<String> getNeighbouredMirs() {

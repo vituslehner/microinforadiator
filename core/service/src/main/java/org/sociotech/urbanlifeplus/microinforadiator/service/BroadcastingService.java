@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sociotech.urbanlifeplus.microinforadiator.BroadcastingConfiguration;
 import org.sociotech.urbanlifeplus.microinforadiator.CoreConfiguration;
+import org.sociotech.urbanlifeplus.microinforadiator.model.event.MirStatusEvent;
 import org.sociotech.urbanlifeplus.microinforadiator.model.event.ReactorEvent;
 import org.sociotech.urbanlifeplus.microinforadiator.mqtt.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
+import static org.sociotech.urbanlifeplus.microinforadiator.BroadcastingConfiguration.TOPIC_BASE;
+import static org.sociotech.urbanlifeplus.microinforadiator.BroadcastingConfiguration.TOPIC_SUFFIX_STATUS;
 
 /**
  * Broadcasting service receives messages from MQTT bus and generates and submits reactor events from it.
@@ -94,12 +97,24 @@ public class BroadcastingService implements MqttListener {
         try {
             if (isLocalEvent(event) && coreConfiguration.getRecursionDepth() > 0) {
                 LOGGER.debug("Broadcasting reactor event: {}", event);
-                convertAndSendEvent(event);
+                convertAndSendEvent(event, broadcastingConfiguration.getSourceTopic());
             }
         } catch (JsonProcessingException e) {
             LOGGER.error("Could not generate JSON from event: {}", event, e);
         } catch (MqttServiceException e) {
             LOGGER.error("Could not broadcast message for event: {}", event, e);
+        }
+    }
+
+    @Subscribe
+    public void broadcastStatusEvent(MirStatusEvent event) {
+        try {
+            LOGGER.debug("Broadcasting status: {}", event);
+            convertAndSendEvent(event, TOPIC_BASE + TOPIC_SUFFIX_STATUS);
+        } catch (JsonProcessingException e) {
+            LOGGER.error("Could not generate JSON from status: {}", event, e);
+        } catch (MqttServiceException e) {
+            LOGGER.error("Could not broadcast message for status: {}", event, e);
         }
     }
 
@@ -138,13 +153,13 @@ public class BroadcastingService implements MqttListener {
         mqttService.sendMessage(redirectedMessage);
     }
 
-    private void convertAndSendEvent(ReactorEvent event) throws JsonProcessingException {
+    private void convertAndSendEvent(Object event, String topic) throws JsonProcessingException {
         String jsonData = objectMapper.writeValueAsString(event);
         MqttMessage message = new MqttMessageBuilder()
                 .setRawData(jsonData)
                 .setClassName(event.getClass().getName())
                 .setMirSourceId(coreConfiguration.getMirId())
-                .setTopic(broadcastingConfiguration.getSourceTopic())
+                .setTopic(topic)
                 .setMirPath(newArrayList(coreConfiguration.getMirId()))
                 .setRecursionDepth(coreConfiguration.getRecursionDepth() - 1)
                 .build();
@@ -160,6 +175,6 @@ public class BroadcastingService implements MqttListener {
      * @return true if event's origin is local
      */
     private boolean isLocalEvent(ReactorEvent event) {
-        return Objects.equals(event.getMirId(), coreConfiguration.getMirId());
+        return Objects.equals(event.getSourceMirId(), coreConfiguration.getMirId());
     }
 }

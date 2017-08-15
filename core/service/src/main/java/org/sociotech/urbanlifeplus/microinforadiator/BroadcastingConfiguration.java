@@ -5,6 +5,7 @@
 package org.sociotech.urbanlifeplus.microinforadiator;
 
 import org.sociotech.urbanlifeplus.microinforadiator.mqtt.MqttDynamicConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,9 +19,11 @@ import java.util.stream.Collectors;
 public class BroadcastingConfiguration {
 
     public final static String TOPIC_BASE = "ulp/mir/";
+    public static final String TOPIC_SUFFIX_STATUS = "status";
 
     private final CoreConfiguration coreConfiguration;
 
+    @Autowired
     public BroadcastingConfiguration(CoreConfiguration coreConfiguration) {
         this.coreConfiguration = coreConfiguration;
     }
