@@ -7,7 +7,7 @@ package org.sociotech.urbanlifeplus.microinforadiator.model;
 /**
  * @author vituslehner 04.07.17
  */
-public class Cachable {
+public abstract class Cachable {
 
     private long timeToLive;
 
