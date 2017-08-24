@@ -6,6 +6,7 @@ package org.sociotech.urbanlifeplus.microinforadiator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.eventbus.EventBus;
+import org.sociotech.urbanlifeplus.microinforadiator.model.WayPoint;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +35,19 @@ public class CoreConfiguration {
 
     public String getMirId() {
         return mirId;
+    }
+
+    @Value("${ULP_MIR_POSITION}")
+    private String mirPosition;
+
+    public String getMirPosition() {
+        return mirPosition;
+    }
+
+    public WayPoint getMirPositionAsWayPoint() {
+        double lat = Double.parseDouble(mirPosition.split(",")[0].trim());
+        double lng = Double.parseDouble(mirPosition.split(",")[1].trim());
+        return new WayPoint(lat, lng);
     }
 
     @Value("${ULP_RECURSION_DEPTH:3}")

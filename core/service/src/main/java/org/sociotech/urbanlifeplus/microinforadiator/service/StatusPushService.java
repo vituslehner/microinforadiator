@@ -7,14 +7,12 @@ package org.sociotech.urbanlifeplus.microinforadiator.service;
 import com.google.common.eventbus.EventBus;
 import org.sociotech.urbanlifeplus.microinforadiator.CoreConfiguration;
 import org.sociotech.urbanlifeplus.microinforadiator.model.event.MirStatusEvent;
-import org.sociotech.urbanlifeplus.microinforadiator.mqtt.MqttService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -24,17 +22,17 @@ import java.util.concurrent.TimeUnit;
 public class StatusPushService implements ApplicationListener<ApplicationReadyEvent> {
 
     private final TimingService timingService;
-    private final MqttService mqttService;
+    private final LightService lightService;
     private final CoreConfiguration coreConfiguration;
     private final EventBus reactorEventBus;
 
     @Autowired
     public StatusPushService(TimingService timingService,
-                             MqttService mqttService,
+                             LightService lightService,
                              CoreConfiguration coreConfiguration,
                              @Qualifier("reactorEventBus") EventBus reactorEventBus) {
         this.timingService = timingService;
-        this.mqttService = mqttService;
+        this.lightService = lightService;
         this.coreConfiguration = coreConfiguration;
         this.reactorEventBus = reactorEventBus;
     }
@@ -47,7 +45,7 @@ public class StatusPushService implements ApplicationListener<ApplicationReadyEv
     }
 
     private void publishStatus() {
-        MirStatusEvent status = new MirStatusEvent(coreConfiguration.getMirId(), null, Collections.emptySet());
+        MirStatusEvent status = new MirStatusEvent(coreConfiguration.getMirId(), coreConfiguration.getMirPositionAsWayPoint(), lightService.getCurrentColors());
         reactorEventBus.post(status);
     }
 }

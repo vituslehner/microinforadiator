@@ -12,19 +12,19 @@ import com.google.common.base.Objects;
  */
 public class WayPoint {
 
-    private final long lat;
-    private final long lng;
+    private final double lat;
+    private final double lng;
 
-    public WayPoint(long lat, long lng) {
+    public WayPoint(double lat, double lng) {
         this.lat = lat;
         this.lng = lng;
     }
 
-    public long getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public long getLng() {
+    public double getLng() {
         return lng;
     }
 

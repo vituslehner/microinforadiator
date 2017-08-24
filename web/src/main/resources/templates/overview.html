@@ -29,6 +29,9 @@
             height: 400px;
         }
     </style>
+    <!-- Eclipse Paho JavaScript MQTT Client -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"
+            type="text/javascript"></script>
 </head>
 <body>
 <div id="wrapper">
@@ -41,66 +44,143 @@
     <script>
         /*<![CDATA[*/
         var map;
+        var markers;
         var data;
-        function initMap() {
+        var mqttClient;
+        var refreshJob;
+        var refreshCounter = 0;
+
+        function initDemo() {
             map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 18,
                 center: new google.maps.LatLng(51.1876702, 6.4605512),
-                mapTypeId: 'terrain',
-
+                mapTypeId: 'hybrid'
             });
 
-            data = ["51.187670, 6.462004",
-                "51.187684, 6.461759",
-                "51.187698, 6.461524",
-                "51.187712, 6.461304",
-                "51.187747, 6.460946",
-                "51.187911, 6.460667",
-                "51.187914, 6.460508",
-                "51.187758, 6.460262",
-                "51.187695, 6.460557",
-                "51.188048, 6.460471",
-                "51.188328, 6.460119",
-                "51.188126, 6.460942",
-                "51.187421, 6.462069",
-                "51.187612, 6.462536",
-                "51.187604, 6.462981"];
+            data = [];
+            markers = [];
+            /*data = ["51.187670, 6.462004",
+             "51.187684, 6.461759",
+             "51.187698, 6.461524",
+             "51.187712, 6.461304",
+             "51.187747, 6.460946",
+             "51.187911, 6.460667",
+             "51.187914, 6.460508",
+             "51.187758, 6.460262",
+             "51.187695, 6.460557",
+             "51.188048, 6.460471",
+             "51.188328, 6.460119",
+             "51.188126, 6.460942",
+             "51.187421, 6.462069",
+             "51.187612, 6.462536",
+             "51.187604, 6.462981"];*/
+
+            var clientId = "ulp-web-" + Math.random().toString(36).substring(7);
+            mqttClient = new Paho.MQTT.Client("ws://iot.eclipse.org:80/ws", clientId);
+
+            mqttClient.onConnectionLost = onMqttConnectionLost;
+            mqttClient.onMessageArrived = onMqttMessageArrived;
+
+            mqttClient.connect({onSuccess: onMqttConnect});
+
+            refreshJob = setInterval(refreshMap, 1500);
         }
 
-        // Loop through the results array and place a marker for each
-        // set of coordinates.
-        window.onload = function () {
-            for (var i = 0; i < data.length; i++) {
-                var coords = data[i].split(", ");
-                console.info("X: " + coords[0] + " Y: " + coords[1]);
-                var latLng = new google.maps.LatLng(coords[0], coords[1]);
-                /*var marker = new google.maps.Marker({
-                    position: latLng,
-                    map: map
-                });*/
-                var color = '#cecece';
-                if (i === 2 || i === 3 || i === 4) {
-                    color = '#eb111f'
-                }
-                else if (i === 6 || i === 7 || i === 9) {
-                    color = '#524ee3'
-                }
-                var circleMarker = new google.maps.Circle({
-                    strokeColor: color,
-                    strokeOpacity: 1,
-                    strokeWeight: 2,
-                    fillColor: color,
-                    fillOpacity: 0.85,
-                    map: map,
-                    center: latLng,
-                    radius: 2.5
-                });
+        function onMqttConnect() {
+            console.log("MQTT client connected.");
+            mqttClient.subscribe("ulp/mir/status");
+        }
+
+        function onMqttConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                console.log("MQTT client connection lost:" + responseObject.errorMessage);
             }
         }
+
+        function onMqttMessageArrived(message) {
+            console.log("MQTT message received: " + message.payloadString);
+            updateData(message.payloadString);
+        }
+
+        function updateData(payload) {
+            var status = JSON.parse(JSON.parse(payload).rawData);
+            var statusIndex = findIndexOfStatus(status.mirId);
+            if (statusIndex === -1) {
+                data.push(status);
+            } else {
+                data[statusIndex] = status;
+            }
+        }
+
+        function findIndexOfStatus(mirId) {
+            return data.findIndex(function (status) {
+                return status.mirId === mirId;
+            })
+        }
+
+        function refreshMap() {
+            console.log("Refreshing map. %d data items.", data.length);
+            data.forEach(refreshMirMarker);
+            refreshCounter++;
+        }
+
+        function refreshMirMarker(item) {
+            console.log("Refreshing marker: %o", item);
+            if (typeof findMarker(item.mirId) === 'undefined') {
+                addMarker(item);
+            }
+            var marker = findMarker(item.mirId).marker;
+            refreshMarkerColor(marker, item);
+        }
+
+        function findMarker(mirId) {
+            return markers.find(function (marker) {
+                return mirId === marker.mirId;
+            });
+        }
+
+        function addMarker(item) {
+            var coords = item.position;
+            console.log("Adding marker for MIR " + item.mirId + " at Lat " + coords.lat + " and Lng " + coords.lng);
+            var latLng = new google.maps.LatLng(coords.lat, coords.lng);
+
+            var color = '#cecece';
+            /*if (i === 2 || i === 3 || i === 4) {
+             color = '#eb111f'
+             }
+             else if (i === 6 || i === 7 || i === 9) {
+             color = '#524ee3'
+             }*/
+            var circleMarker = new google.maps.Circle({
+                strokeColor: '#ffffff',
+                strokeOpacity: 0.95,
+                strokeWeight: 3,
+                fillColor: color,
+                fillOpacity: 0.85,
+                map: map,
+                center: latLng,
+                radius: 4
+            });
+            markers.push({
+                mirId: item.mirId,
+                marker: circleMarker
+            });
+        }
+
+        function refreshMarkerColor(marker, item) {
+            var colorCount = item.lightColors.length;
+            var newColor = colorCount === 0 ? '#cecece' : item.lightColors[refreshCounter % colorCount];
+            var newCircleOptions = {
+                fillColor: newColor,
+                //strokeColor: newColor
+            };
+            marker.setOptions(newCircleOptions);
+        }
+
         /*]]>*/
     </script>
     <script async="async" defer="defer"
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAyoI0_b6XkPvj-_VpKcZfcwcYbJ1lV-80&amp;callback=initMap">
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAyoI0_b6XkPvj-_VpKcZfcwcYbJ1lV-80&amp;callback=initDemo">
     </script>
 </div>
 </body>

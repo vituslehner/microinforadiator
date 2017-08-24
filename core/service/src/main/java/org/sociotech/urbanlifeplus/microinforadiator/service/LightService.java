@@ -70,4 +70,7 @@ public class LightService {
         lightInterfaces.forEach(lightInterface -> lightInterface.setColors(currentColors));
     }
 
+    public Collection<LightColor> getCurrentColors() {
+        return currentColors;
+    }
 }

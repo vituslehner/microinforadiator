@@ -9,7 +9,7 @@ import com.google.common.base.Objects;
 import org.sociotech.urbanlifeplus.microinforadiator.interfaces.light.LightColor;
 import org.sociotech.urbanlifeplus.microinforadiator.model.WayPoint;
 
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * @author vituslehner 12.08.17
@@ -18,9 +18,9 @@ public class MirStatusEvent {
 
     private final String mirId;
     private final WayPoint position;
-    private final Set<LightColor> lightColors;
+    private final Collection<LightColor> lightColors;
 
-    public MirStatusEvent(String mirId, WayPoint position, Set<LightColor> lightColors) {
+    public MirStatusEvent(String mirId, WayPoint position, Collection<LightColor> lightColors) {
         this.mirId = mirId;
         this.position = position;
         this.lightColors = lightColors;
@@ -34,7 +34,7 @@ public class MirStatusEvent {
         return position;
     }
 
-    public Set<LightColor> getLightColors() {
+    public Collection<LightColor> getLightColors() {
         return lightColors;
     }
 
