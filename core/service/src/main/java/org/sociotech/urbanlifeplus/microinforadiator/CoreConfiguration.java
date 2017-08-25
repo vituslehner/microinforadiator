@@ -64,6 +64,20 @@ public class CoreConfiguration {
         return neighbouredMirsRaw;
     }
 
+    @Value("${ULP_MIR_IBEACON_MAJOR}")
+    private String iBeaconMajor;
+
+    public String getIBeaconMajor() {
+        return iBeaconMajor;
+    }
+
+    @Value("${ULP_MIR_IBEACON_MINOR}")
+    private String iBeaconMinor;
+
+    public String getIBeaconMinor() {
+        return iBeaconMinor;
+    }
+
     @Value("${ULP_PUSH_STATUS}")
     private boolean pushStatus;
 
