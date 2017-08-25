@@ -23,7 +23,6 @@ RUN wget "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin
 ADD . /opt/ulp-mir-source
 WORKDIR /opt/ulp-mir-source
 
-#CMD hciattach /dev/ttyAMA0 bcm43xx 921600 noflow - && \
-#    chmod +x ./ble_scan.sh && hciconfig hci0 up && \
-RUN gradle --no-daemon clean build
+RUN export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8 && \
+    gradle --no-daemon clean build
 CMD java -jar ./build/libs/ulp_microinforadiator-*.jar
