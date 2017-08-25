@@ -1,0 +1,72 @@
+version: '2'
+services:
+  mir04:
+    image: vlehner/ulp_microinforadiator:latest
+    mem_limit: 724288000
+    environment:
+      ULP_MIR_ID: 4
+      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_PORT: 1883
+      MQTT_BROKER_USERNAME: test
+      MQTT_BROKER_PASSWORD: test
+      ULP_NEIGHBOURED_MIRS: 2,3
+      ULP_PUSH_STATUS: 'true'
+      ULP_MIR_POSITION: 51.187712,6.461304
+      ULP_WEB_MASTER: 'true'
+      ULP_WEB_CHILDREN: test
+  mir05:
+    image: vlehner/ulp_microinforadiator:latest
+    mem_limit: 724288000
+    environment:
+      ULP_MIR_ID: 5
+      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_PORT: 1883
+      MQTT_BROKER_USERNAME: test
+      MQTT_BROKER_PASSWORD: test
+      ULP_NEIGHBOURED_MIRS: 2,3
+      ULP_PUSH_STATUS: 'true'
+      ULP_MIR_POSITION: 51.187698,6.461524
+      ULP_WEB_MASTER: 'true'
+      ULP_WEB_CHILDREN: test
+  mir06:
+    image: vlehner/ulp_microinforadiator:latest
+    mem_limit: 724288000
+    environment:
+      ULP_MIR_ID: 6
+      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_PORT: 1883
+      MQTT_BROKER_USERNAME: test
+      MQTT_BROKER_PASSWORD: test
+      ULP_NEIGHBOURED_MIRS: 2,3
+      ULP_PUSH_STATUS: 'true'
+      ULP_MIR_POSITION: 51.187747,6.460946
+      ULP_WEB_MASTER: 'true'
+      ULP_WEB_CHILDREN: test
+  mir07:
+    image: vlehner/ulp_microinforadiator:latest
+    mem_limit: 724288000
+    environment:
+      ULP_MIR_ID: 7
+      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_PORT: 1883
+      MQTT_BROKER_USERNAME: test
+      MQTT_BROKER_PASSWORD: test
+      ULP_NEIGHBOURED_MIRS: 2,3
+      ULP_PUSH_STATUS: 'true'
+      ULP_MIR_POSITION: 51.187911,6.460667
+      ULP_WEB_MASTER: 'true'
+      ULP_WEB_CHILDREN: test
+  mir08:
+    image: vlehner/ulp_microinforadiator:latest
+    mem_limit: 724288000
+    environment:
+      ULP_MIR_ID: 8
+      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_PORT: 1883
+      MQTT_BROKER_USERNAME: test
+      MQTT_BROKER_PASSWORD: test
+      ULP_NEIGHBOURED_MIRS: 2,3
+      ULP_PUSH_STATUS: 'true'
+      ULP_MIR_POSITION: 51.187914,6.460508
+      ULP_WEB_MASTER: 'true'
+      ULP_WEB_CHILDREN: test
