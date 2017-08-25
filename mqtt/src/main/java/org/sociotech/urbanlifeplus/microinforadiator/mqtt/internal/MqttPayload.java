@@ -4,64 +4,50 @@
 
 package org.sociotech.urbanlifeplus.microinforadiator.mqtt.internal;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
-
-import java.util.List;
+import com.google.common.base.Objects;
 
 /**
  * @author vituslehner 12.07.17
  */
 public class MqttPayload {
 
-    private final String mirSourceId;
-    private final String className;
-    private final Object rawData;
-    private final List<String> mirPath;
-    private final int recursionDepth;
+    private final String topic;
+    private final String content;
 
-    @JsonCreator
-    public MqttPayload(@JsonProperty("mirSourceId") String mirSourceId,
-                       @JsonProperty("className") String className,
-                       @JsonProperty("rawData") Object rawData,
-                       @JsonProperty("mirPath") List<String> mirPath,
-                       @JsonProperty("recursionDepth") int recursionDepth) {
-        this.mirSourceId = mirSourceId;
-        this.className = className;
-        this.rawData = rawData;
-        this.mirPath = mirPath;
-        this.recursionDepth = recursionDepth;
+
+    public MqttPayload(String topic, String content) {
+        this.topic = topic;
+        this.content = content;
     }
 
-    public String getMirSourceId() {
-        return mirSourceId;
+    public String getTopic() {
+        return topic;
     }
 
-    public String getClassName() {
-        return className;
+    public String getContent() {
+        return content;
     }
 
-    public Object getRawData() {
-        return rawData;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MqttPayload that = (MqttPayload) o;
+        return Objects.equal(topic, that.topic) &&
+                Objects.equal(content, that.content);
     }
 
-    public List<String> getMirPath() {
-        return mirPath;
-    }
-
-    public int getRecursionDepth() {
-        return recursionDepth;
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(topic, content);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("mirSourceId", mirSourceId)
-                .add("className", className)
-                .add("rawData", rawData)
-                .add("mirPath", mirPath)
-                .add("recursionDepth", recursionDepth)
+                .add("topic", topic)
+                .add("content", content)
                 .toString();
     }
 }

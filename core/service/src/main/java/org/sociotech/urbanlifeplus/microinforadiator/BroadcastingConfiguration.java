@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class BroadcastingConfiguration {
 
     public final static String TOPIC_BASE = "ulp/mir/";
+    public final static String TOPIC_USER_DEVICE_BASE = "ulp/sp/";
     public static final String TOPIC_SUFFIX_STATUS = "status";
 
     private final CoreConfiguration coreConfiguration;
@@ -36,6 +37,7 @@ public class BroadcastingConfiguration {
                         .map(t -> TOPIC_BASE + t)
                         .collect(Collectors.toList());
         topicSubscriptions.add(getSourceTopic());
+        topicSubscriptions.add(TOPIC_USER_DEVICE_BASE + "+/" + coreConfiguration.getIBeaconMajor() + "-" + coreConfiguration.getIBeaconMinor());
         return new MqttDynamicConfiguration(coreConfiguration.getMirId(), topicSubscriptions, getSourceTopic());
     }
 

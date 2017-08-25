@@ -14,7 +14,11 @@ import org.sociotech.urbanlifeplus.microinforadiator.BroadcastingConfiguration;
 import org.sociotech.urbanlifeplus.microinforadiator.CoreConfiguration;
 import org.sociotech.urbanlifeplus.microinforadiator.model.event.MirStatusEvent;
 import org.sociotech.urbanlifeplus.microinforadiator.model.event.ReactorEvent;
-import org.sociotech.urbanlifeplus.microinforadiator.mqtt.*;
+import org.sociotech.urbanlifeplus.microinforadiator.model.event.UserProximityEvent;
+import org.sociotech.urbanlifeplus.microinforadiator.mqtt.MqttListener;
+import org.sociotech.urbanlifeplus.microinforadiator.mqtt.MqttService;
+import org.sociotech.urbanlifeplus.microinforadiator.mqtt.MqttServiceException;
+import org.sociotech.urbanlifeplus.microinforadiator.mqtt.internal.MqttPayload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -25,8 +29,7 @@ import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
-import static org.sociotech.urbanlifeplus.microinforadiator.BroadcastingConfiguration.TOPIC_BASE;
-import static org.sociotech.urbanlifeplus.microinforadiator.BroadcastingConfiguration.TOPIC_SUFFIX_STATUS;
+import static org.sociotech.urbanlifeplus.microinforadiator.BroadcastingConfiguration.*;
 
 /**
  * Broadcasting service receives messages from MQTT bus and generates and submits reactor events from it.
@@ -65,10 +68,25 @@ public class BroadcastingService implements MqttListener {
     /**
      * Handle messages coming from MQTT bus and convert and submit them to reactor event bus.
      *
-     * @param message the MQTT message coming in
+     * @param payload the MQTT payload coming in
      */
     @Override
-    public void handleMessage(MqttMessage message) {
+    public void handleMessage(MqttPayload payload) {
+        if (payload.getTopic().startsWith(TOPIC_USER_DEVICE_BASE)) {
+            handleUserDeviceMessage(payload);
+        } else if (payload.getTopic().startsWith(TOPIC_BASE)) {
+            handleMirMessage(payload);
+        }
+    }
+
+    private void handleUserDeviceMessage(MqttPayload payload) {
+        UserDeviceMessage message = convertPayloadToUserDeviceMessage(payload);
+        UserProximityEvent reactorEvent = new UserProximityEvent(message.getUser(), coreConfiguration.getMirId(), message.getProximity());
+        reactorEventBus.post(reactorEvent);
+    }
+
+    private void handleMirMessage(MqttPayload payload) {
+        BroadcastingMessage message = convertPayloadToBroadcastingMessage(payload);
         try {
             validateMessage(message);
             if (!isLocalMirInPath(message)) {
@@ -127,7 +145,7 @@ public class BroadcastingService implements MqttListener {
         return objectMapper.readValue(rawData.toString(), sourceClass);
     }
 
-    private void validateMessage(MqttMessage message) {
+    private void validateMessage(BroadcastingMessage message) {
         checkNotNull(message.getMirSourceId(), "mirSourceId must not be null.");
         checkNotNull(message.getMirPath(), "mirPath must not be null.");
         checkNotNull(message.getRawData(), "rawData must not be null.");
@@ -135,14 +153,10 @@ public class BroadcastingService implements MqttListener {
         checkNotNull(message.getClassName(), "className must not be null.");
     }
 
-    private boolean isLocalMirInPath(MqttMessage message) {
-        return message.getMirPath().stream().anyMatch(p -> Objects.equals(p, coreConfiguration.getMirId()));
-    }
-
-    private void redirectMessage(MqttMessage message) {
+    private void redirectMessage(BroadcastingMessage message) {
         List<String> updatedMirPath = message.getMirPath();
         updatedMirPath.add(coreConfiguration.getMirId());
-        MqttMessage redirectedMessage = new MqttMessageBuilder()
+        BroadcastingMessage redirectedMessage = new BroadcastingMessageBuilder()
                 .setRawData(message.getRawData())
                 .setClassName(message.getClassName())
                 .setMirSourceId(message.getMirSourceId())
@@ -150,12 +164,13 @@ public class BroadcastingService implements MqttListener {
                 .setMirPath(updatedMirPath)
                 .setRecursionDepth(message.getRecursionDepth() - 1)
                 .build();
-        mqttService.sendMessage(redirectedMessage);
+        MqttPayload payload = convertBroadcastingMessageToPayload(redirectedMessage);
+        mqttService.sendMessage(payload);
     }
 
     private void convertAndSendEvent(Object event, String topic) throws JsonProcessingException {
         String jsonData = objectMapper.writeValueAsString(event);
-        MqttMessage message = new MqttMessageBuilder()
+        BroadcastingMessage message = new BroadcastingMessageBuilder()
                 .setRawData(jsonData)
                 .setClassName(event.getClass().getName())
                 .setMirSourceId(coreConfiguration.getMirId())
@@ -163,7 +178,8 @@ public class BroadcastingService implements MqttListener {
                 .setMirPath(newArrayList(coreConfiguration.getMirId()))
                 .setRecursionDepth(coreConfiguration.getRecursionDepth() - 1)
                 .build();
-        mqttService.sendMessage(message);
+        MqttPayload payload = convertBroadcastingMessageToPayload(message);
+        mqttService.sendMessage(payload);
     }
 
     /**
@@ -176,5 +192,33 @@ public class BroadcastingService implements MqttListener {
      */
     private boolean isLocalEvent(ReactorEvent event) {
         return Objects.equals(event.getSourceMirId(), coreConfiguration.getMirId());
+    }
+
+    private boolean isLocalMirInPath(BroadcastingMessage message) {
+        return message.getMirPath().stream().anyMatch(p -> Objects.equals(p, coreConfiguration.getMirId()));
+    }
+
+    private BroadcastingMessage convertPayloadToBroadcastingMessage(MqttPayload payload) {
+        try {
+            return objectMapper.readValue(payload.getContent(), BroadcastingMessage.class);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Failed to read incoming JSON MQTT payload. Payload: " + payload, e);
+        }
+    }
+
+    private UserDeviceMessage convertPayloadToUserDeviceMessage(MqttPayload payload) {
+        try {
+            return objectMapper.readValue(payload.getContent(), UserDeviceMessage.class);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Failed to read incoming JSON MQTT User Devicepayload. Payload: " + payload, e);
+        }
+    }
+
+    private MqttPayload convertBroadcastingMessageToPayload(BroadcastingMessage message) {
+        try {
+            return new MqttPayload(message.getTopic(), objectMapper.writeValueAsString(message));
+        } catch (JsonProcessingException e) {
+            throw new IllegalArgumentException("Failed to write outgoing JSON MQTT payload. Message: " + message, e);
+        }
     }
 }

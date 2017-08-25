@@ -2,11 +2,11 @@
  * Copyright (c) 2017. Vitus Lehner. UrbanLife+. Universität der Bundeswehr München.
  */
 
-package org.sociotech.urbanlifeplus.microinforadiator.mqtt;
+package org.sociotech.urbanlifeplus.microinforadiator.service;
 
 import java.util.List;
 
-public class MqttMessageBuilder {
+public class BroadcastingMessageBuilder {
     private Object rawData;
     private String className;
     private String topic;
@@ -14,37 +14,37 @@ public class MqttMessageBuilder {
     private List<String> mirPath;
     private int recursionDepth;
 
-    public MqttMessageBuilder setRawData(Object rawData) {
+    public BroadcastingMessageBuilder setRawData(Object rawData) {
         this.rawData = rawData;
         return this;
     }
 
-    public MqttMessageBuilder setClassName(String className) {
+    public BroadcastingMessageBuilder setClassName(String className) {
         this.className = className;
         return this;
     }
 
-    public MqttMessageBuilder setTopic(String topic) {
+    public BroadcastingMessageBuilder setTopic(String topic) {
         this.topic = topic;
         return this;
     }
 
-    public MqttMessageBuilder setMirSourceId(String mirSourceId) {
+    public BroadcastingMessageBuilder setMirSourceId(String mirSourceId) {
         this.mirSourceId = mirSourceId;
         return this;
     }
 
-    public MqttMessageBuilder setMirPath(List<String> mirPath) {
+    public BroadcastingMessageBuilder setMirPath(List<String> mirPath) {
         this.mirPath = mirPath;
         return this;
     }
 
-    public MqttMessageBuilder setRecursionDepth(int recursionDepth) {
+    public BroadcastingMessageBuilder setRecursionDepth(int recursionDepth) {
         this.recursionDepth = recursionDepth;
         return this;
     }
 
-    public MqttMessage build() {
-        return new MqttMessage(rawData, className, topic, mirSourceId, mirPath, recursionDepth);
+    public BroadcastingMessage build() {
+        return new BroadcastingMessage(rawData, className, topic, mirSourceId, mirPath, recursionDepth);
     }
 }

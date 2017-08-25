@@ -16,8 +16,6 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
 /**
  * @author vituslehner 12.07.17
  */
@@ -45,36 +43,15 @@ public class MqttService implements MessageHandler {
         this.listener = listener;
     }
 
-    public void sendMessage(MqttMessage message) {
-        try {
-            MqttPayload payload = new MqttPayload(message.getMirSourceId(),
-                    message.getClassName(),
-                    message.getRawData(),
-                    message.getMirPath(),
-                    message.getRecursionDepth());
-            String jsonPayload = jsonMapper.writeValueAsString(payload);
-            mqttGateway.send(jsonPayload, message.getTopic());
-        } catch (IOException e) {
-            throw new MqttServiceException("Failed to write outgoing MQTT JSON payload. Payload: " + message.getRawData(), e);
-        }
+    public void sendMessage(MqttPayload payload) {
+        mqttGateway.send(payload.getContent(), payload.getTopic());
     }
 
     @Override
     @ServiceActivator(inputChannel = "mqttInputChannel")
     public void handleMessage(Message<?> message) throws MessagingException {
-        try {
-            MqttPayload payload = jsonMapper.readValue((String) message.getPayload(), MqttPayload.class);
-            MqttMessage inboundMessage = new MqttMessageBuilder()
-                    .setRawData(payload.getRawData())
-                    .setClassName(payload.getClassName())
-                    .setTopic((String) message.getHeaders().get(MqttHeaders.TOPIC))
-                    .setMirSourceId(payload.getMirSourceId())
-                    .setMirPath(payload.getMirPath())
-                    .setRecursionDepth(payload.getRecursionDepth())
-                    .build();
-            listener.handleMessage(inboundMessage);
-        } catch (IOException e) {
-            throw new MqttServiceException("Failed to read incoming JSON MQTT payload. Payload: " + message.getPayload(), e);
-        }
+        String topic = (String) message.getHeaders().get(MqttHeaders.TOPIC);
+        MqttPayload inboundMessage = new MqttPayload(topic, (String) message.getPayload());
+        listener.handleMessage(inboundMessage);
     }
 }

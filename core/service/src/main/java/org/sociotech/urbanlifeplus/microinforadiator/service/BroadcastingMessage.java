@@ -2,7 +2,7 @@
  * Copyright (c) 2017. Vitus Lehner. UrbanLife+. Universität der Bundeswehr München.
  */
 
-package org.sociotech.urbanlifeplus.microinforadiator.mqtt;
+package org.sociotech.urbanlifeplus.microinforadiator.service;
 
 import com.google.common.base.MoreObjects;
 
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author vituslehner 12.07.17
  */
-public class MqttMessage {
+public class BroadcastingMessage {
 
     private final Object rawData;
     private final String className;
@@ -20,7 +20,7 @@ public class MqttMessage {
     private final List<String> mirPath;
     private final int recursionDepth;
 
-    public MqttMessage(Object rawData, String className, String topic, String mirSourceId, List<String> mirPath, int recursionDepth) {
+    public BroadcastingMessage(Object rawData, String className, String topic, String mirSourceId, List<String> mirPath, int recursionDepth) {
         this.rawData = rawData;
         this.className = className;
         this.topic = topic;

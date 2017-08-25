@@ -4,11 +4,13 @@
 
 package org.sociotech.urbanlifeplus.microinforadiator.mqtt;
 
+import org.sociotech.urbanlifeplus.microinforadiator.mqtt.internal.MqttPayload;
+
 /**
  * @author vituslehner 12.07.17
  */
 public interface MqttListener {
 
-    void handleMessage(MqttMessage message);
+    void handleMessage(MqttPayload message);
 
 }
