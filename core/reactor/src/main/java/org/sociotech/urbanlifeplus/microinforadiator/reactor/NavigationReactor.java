@@ -19,12 +19,14 @@ import org.sociotech.urbanlifeplus.microinforadiator.model.User;
 import org.sociotech.urbanlifeplus.microinforadiator.model.WayPoint;
 import org.sociotech.urbanlifeplus.microinforadiator.model.event.LightColorResetEvent;
 import org.sociotech.urbanlifeplus.microinforadiator.model.event.UserProximityEvent;
+import org.sociotech.urbanlifeplus.microinforadiator.service.EmotionService;
 import org.sociotech.urbanlifeplus.microinforadiator.service.LightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.sociotech.urbanlifeplus.microinforadiator.interfaces.proximity.Proximity.NEAR;
 
@@ -43,12 +45,14 @@ public class NavigationReactor {
 
     private final CoreConfiguration coreConfiguration;
     private final LightService lightService;
+    private final EmotionService emotionService;
     private final EventBus reactorEventBus;
 
     @Autowired
-    public NavigationReactor(CoreConfiguration coreConfiguration, LightService lightService, @Qualifier("reactorEventBus") EventBus reactorEventBus) {
+    public NavigationReactor(CoreConfiguration coreConfiguration, LightService lightService, EmotionService emotionService, @Qualifier("reactorEventBus") EventBus reactorEventBus) {
         this.coreConfiguration = coreConfiguration;
         this.lightService = lightService;
+        this.emotionService = emotionService;
         this.reactorEventBus = reactorEventBus;
         this.reactorEventBus.register(this);
     }
@@ -68,21 +72,31 @@ public class NavigationReactor {
      */
     @Subscribe
     public void proximityEvent(UserProximityEvent event) {
-        LOGGER.debug("Receiving reactor proximity event: {}", event);
-
         User user = event.getUser();
         Proximity proximity = event.getProximity();
 
-        if (proximity == NEAR && isLocalEvent(event)) {
-            // TODO light signal
+        if (user == null || user.getRoute() == null || user.getColor() == null) {
+            return;
         }
 
-        if (user != null && user.getRoute() != null && user.getColor() != null) {
-            handleRoute(user);
+        LOGGER.debug("Proximity: {}, SourceMirID: {}, LocalMirID: {}, IDs equal: {}", proximity, event.getSourceMirId(), coreConfiguration.getMirId(), isLocalEvent(event));
+        boolean isOnRoute = isOnRoute(user);
+        if (isOnRoute) {
+            LOGGER.debug("MIR {} is on route..", user.getId());
+            lightService.addColor(user.getColor());
+            if (proximity == NEAR && isLocalEvent(event)) {
+                emotionService.givePositiveFeedbackSignal();
+            }
+        } else {
+            LOGGER.debug("MIR {} is NOT on route.", user.getId());
+            lightService.removeColor(user.getColor());
+            if (proximity == NEAR && isLocalEvent(event)) {
+                emotionService.giveNegativeFeedbackSignal();
+            }
         }
     }
 
-    private void handleRoute(User user) {
+    private boolean isOnRoute(User user) {
         Polyline route = convertRouteToPolyline(user.getRoute());
         WayPoint mirPosition = coreConfiguration.getMirPositionAsWayPoint();
         Point mirPoint = convertWayPointToPoint(mirPosition);
@@ -90,13 +104,7 @@ public class NavigationReactor {
         LOGGER.debug("Route-Comparision. Polyline: {} Point: {}", route, mirPoint);
         double distance = calculateDistance(mirPoint, route);
         LOGGER.debug("Distance: {}", distance);
-        if (distance <= DISTANCE_TOLERANCE) {
-            LOGGER.debug("Point {} is on route {}.", mirPoint, route);
-            lightService.addColor(user.getColor());
-        } else {
-            LOGGER.debug("Point {} is not on route {}.", mirPoint, route);
-            lightService.removeColor(user.getColor());
-        }
+        return distance <= DISTANCE_TOLERANCE;
     }
 
     private Polyline convertRouteToPolyline(Route route) {
@@ -120,7 +128,7 @@ public class NavigationReactor {
     }
 
     private boolean isLocalEvent(UserProximityEvent event) {
-        return coreConfiguration.getMirId().equals(event.getSourceMirId());
+        return Objects.equals(coreConfiguration.getMirId(), event.getSourceMirId());
     }
 
 }
