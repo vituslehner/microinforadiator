@@ -4,6 +4,8 @@
 
 package org.sociotech.urbanlifeplus.microinforadiator.service;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import org.sociotech.urbanlifeplus.microinforadiator.interfaces.proximity.Proximity;
@@ -18,7 +20,10 @@ public class UserDeviceMessage {
     private final Proximity proximity;
     private final String mirIBeaconMajorMinor;
 
-    public UserDeviceMessage(User user, Proximity proximity, String mirIBeaconMajorMinor) {
+    @JsonCreator
+    public UserDeviceMessage(@JsonProperty("user") User user,
+                             @JsonProperty("proximity") Proximity proximity,
+                             @JsonProperty("mirIBeaconMajorMinor") String mirIBeaconMajorMinor) {
         this.user = user;
         this.proximity = proximity;
         this.mirIBeaconMajorMinor = mirIBeaconMajorMinor;

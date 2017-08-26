@@ -4,6 +4,8 @@
 
 package org.sociotech.urbanlifeplus.microinforadiator.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
@@ -15,7 +17,9 @@ public class WayPoint {
     private final double lat;
     private final double lng;
 
-    public WayPoint(double lat, double lng) {
+    @JsonCreator
+    public WayPoint(@JsonProperty("lat") double lat,
+                    @JsonProperty("lng") double lng) {
         this.lat = lat;
         this.lng = lng;
     }

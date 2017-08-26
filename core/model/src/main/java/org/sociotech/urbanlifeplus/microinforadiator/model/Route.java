@@ -4,6 +4,8 @@
 
 package org.sociotech.urbanlifeplus.microinforadiator.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
@@ -16,8 +18,13 @@ public class Route {
 
     private final List<WayPoint> wayPoints;
 
-    public Route(List<WayPoint> wayPoints) {
+    @JsonCreator
+    public Route(@JsonProperty("wayPoints") List<WayPoint> wayPoints) {
         this.wayPoints = wayPoints;
+    }
+
+    public List<WayPoint> getWayPoints() {
+        return wayPoints;
     }
 
     @Override

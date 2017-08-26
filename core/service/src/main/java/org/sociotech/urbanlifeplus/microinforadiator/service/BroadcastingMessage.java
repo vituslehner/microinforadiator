@@ -4,6 +4,8 @@
 
 package org.sociotech.urbanlifeplus.microinforadiator.service;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 
 import java.util.List;
@@ -20,7 +22,13 @@ public class BroadcastingMessage {
     private final List<String> mirPath;
     private final int recursionDepth;
 
-    public BroadcastingMessage(Object rawData, String className, String topic, String mirSourceId, List<String> mirPath, int recursionDepth) {
+    @JsonCreator
+    public BroadcastingMessage(@JsonProperty("rawData") Object rawData,
+                               @JsonProperty("className") String className,
+                               @JsonProperty("topic") String topic,
+                               @JsonProperty("mirSourceId") String mirSourceId,
+                               @JsonProperty("mirPath") List<String> mirPath,
+                               @JsonProperty("recursionDepth") int recursionDepth) {
         this.rawData = rawData;
         this.className = className;
         this.topic = topic;
