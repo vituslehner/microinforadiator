@@ -42,36 +42,78 @@
     <div id="map"></div>
     <hr/>
     <div id="controls">
-        <h2>Margot Nowak</h2>
-        <form onsubmit="return false;">
-            <p>
-                <label>Start:
-                    <select name="margot_start">
-                        <option>Hardterbroicher Str. 107, 41065 Mönchengladbach</option>
-                        <option>Bungtstraße 1, 41065 Mönchengladbach</option>
-                        <option>Bungtstraße 2, 41065 Mönchengladbach</option>
-                        <option>Dechant-Janssen-Weg 2, 41065 Mönchengladbach</option>
-                    </select>
-                </label>
-            </p>
-            <p>
-                <label>Ziel:
-                    <select name="margot_ziel">
-                        <option>Dechant-Janssen-Weg 11, 41065 Mönchengladbach</option>
-                    </select>
-                </label>
-            </p>
-            <p><input type="submit" name="margot_submit_show" value="Route berechnen und anzeigen"
-                      onclick="margotCalcShow()"/></p>
-            <p>
-                <label>Strahler:
-                    <select name="margot_strahler">
-                    </select>
-                </label>
-            </p>
-            <p><input type="submit" name="margot_submit_publish"
-                      value="Route berechnen und Annäherungsevent veröffentlichen" onclick="margotCalcPublish()"/></p>
-        </form>
+        <table style="border:0;margin:0;padding:0;width:100%">
+            <tr>
+                <td>
+                    <h2>Margot Nowak</h2>
+                    <form onsubmit="return false;">
+                        <p>
+                            <label>Start:
+                                <select name="margot_start" onchange="margotCalcShow()">
+                                    <option>Hardterbroicher Str. 107, 41065 Mönchengladbach</option>
+                                    <option>Bungtstraße 1, 41065 Mönchengladbach</option>
+                                    <option>Bungtstraße 2, 41065 Mönchengladbach</option>
+                                    <option>Dechant-Janssen-Weg 2, 41065 Mönchengladbach</option>
+                                </select>
+                            </label>
+                        </p>
+                        <p>
+                            <label>Ziel:
+                                <select name="margot_ziel" onchange="margotCalcShow()">
+                                    <option>Dechant-Janssen-Weg 11, 41065 Mönchengladbach</option>
+                                </select>
+                            </label>
+                        </p>
+                        <p><input type="submit" name="margot_submit_show" value="Route berechnen und anzeigen"
+                                  onclick="margotCalcShow()"/></p>
+                        <p>
+                            <label>Strahler:
+                                <select name="margot_strahler">
+                                </select>
+                            </label>
+                        </p>
+                        <p><input type="submit" name="margot_submit_publish"
+                                  value="Route berechnen und Annäherungsevent veröffentlichen"
+                                  onclick="margotCalcPublish()"/>
+                        </p>
+                    </form>
+                </td>
+                <td>
+                    <h2>Brigitte Feldmann</h2>
+                    <form onsubmit="return false;">
+                        <p>
+                            <label>Start:
+                                <select name="brigitte_start" onchange="brigitteCalcShow()">
+                                    <option>Hardterbroicher Str. 107, 41065 Mönchengladbach</option>
+                                    <option>Bungtstraße 1, 41065 Mönchengladbach</option>
+                                    <option>Bungtstraße 2, 41065 Mönchengladbach</option>
+                                    <option>Dechant-Janssen-Weg 2, 41065 Mönchengladbach</option>
+                                </select>
+                            </label>
+                        </p>
+                        <p>
+                            <label>Ziel:
+                                <select name="brigitte_ziel" onchange="brigitteCalcShow()">
+                                    <option>Dechant-Janssen-Weg 11, 41065 Mönchengladbach</option>
+                                </select>
+                            </label>
+                        </p>
+                        <p><input type="submit" name="brigitte_submit_show" value="Route berechnen und anzeigen"
+                                  onclick="brigitteCalcShow()"/></p>
+                        <p>
+                            <label>Strahler:
+                                <select name="brigitte_strahler">
+                                </select>
+                            </label>
+                        </p>
+                        <p><input type="submit" name="brigitte_submit_publish"
+                                  value="Route berechnen und Annäherungsevent veröffentlichen"
+                                  onclick="brigitteCalcPublish()"/>
+                        </p>
+                    </form>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <script>
@@ -93,7 +135,7 @@
                 mapTypeId: 'hybrid'
             });
             directionsService = new google.maps.DirectionsService;
-            directionsDisplay = new google.maps.DirectionsRenderer;
+            directionsDisplay = new google.maps.DirectionsRenderer({preserveViewport: true});
             directionsDisplay.setMap(map);
 
             data = [];
@@ -131,12 +173,17 @@
             var statusIndex = findIndexOfStatus(status.mirId);
             if (statusIndex === -1) {
                 data.push(status);
-                var option = document.createElement("option");
-                option.text = status.mirId;
-                document.getElementsByName("margot_strahler")[0].add(option);
+                addOptions(status.mirId);
             } else {
                 data[statusIndex] = status;
             }
+        }
+
+        function addOptions(mirId) {
+            var option = document.createElement("option");
+            option.text = mirId;
+            document.getElementsByName("margot_strahler")[0].add(option);
+            document.getElementsByName("brigitte_strahler")[0].add(option);
         }
 
         function findIndexOfStatus(mirId) {
@@ -182,6 +229,12 @@
                 center: latLng,
                 radius: 5
             });
+            var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: item.mirId,
+                label: item.mirId
+            });
             markers.push({
                 mirId: item.mirId,
                 marker: circleMarker
@@ -223,12 +276,12 @@
                     var topic = "ulp/sp/" + user.id + "/" + mirMajorMinor;
                     console.log("Path: " + response.routes[0].overview_path)
                     user.route = {
-                        "wayPoints": response.routes[0].overview_path
+                        wayPoints: response.routes[0].overview_path
                     };
                     var event = {
-                        "user": user,
-                        "proximity": "NEAR",
-                        "mirIBeaconMajorMinor": mirMajorMinor
+                        user: user,
+                        proximity: "NEAR",
+                        mirIBeaconMajorMinor: mirMajorMinor
                     }
                     var message = new Paho.MQTT.Message(JSON.stringify(event));
                     message.destinationName = topic;
@@ -254,12 +307,12 @@
             var strahler = document.getElementsByName("margot_strahler")[0].value;
 
             var user = {
-                "id": 123,
-                "firstName": "Margot",
-                "lastName": "Nowak",
-                "route": null,
-                "color": "BLUE",
-                "impairments": null
+                id: 123,
+                firstName: "Margot",
+                lastName: "Nowak",
+                route: null,
+                color: "BLUE",
+                impairments: null
             };
             calcDirectionsAndPublishUserProximity(start, ziel, user, strahler);
         }
