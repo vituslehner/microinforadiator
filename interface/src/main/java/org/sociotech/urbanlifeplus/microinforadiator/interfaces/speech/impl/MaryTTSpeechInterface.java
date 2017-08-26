@@ -4,16 +4,9 @@
 
 package org.sociotech.urbanlifeplus.microinforadiator.interfaces.speech.impl;
 
-import marytts.LocalMaryInterface;
-import marytts.MaryInterface;
-import marytts.exceptions.MaryConfigurationException;
-import marytts.exceptions.SynthesisException;
-import marytts.util.data.audio.AudioPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import javax.sound.sampled.AudioInputStream;
 
 /**
  * @author vituslehner 11.08.17
@@ -24,7 +17,7 @@ public class MaryTTSpeechInterface {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public MaryTTSpeechInterface() {
-        MaryInterface marytts = null;
+        /*MaryInterface marytts = null;
         try {
             marytts = new LocalMaryInterface();
 
@@ -41,7 +34,7 @@ public class MaryTTSpeechInterface {
             logger.error("Mary error 2: ", e);
         } catch (SynthesisException e) {
             logger.error("Mary error 3: ", e);
-        }
+        }*/
     }
 
 }
