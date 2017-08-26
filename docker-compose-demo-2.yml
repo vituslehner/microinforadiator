@@ -77,7 +77,7 @@ services:
       MQTT_BROKER_PORT: 1883
       MQTT_BROKER_USERNAME: test
       MQTT_BROKER_PASSWORD: test
-      ULP_NEIGHBOURED_MIRS: 17,19
+      ULP_NEIGHBOURED_MIRS: 17,19,23
       ULP_PUSH_STATUS: 'true'
       ULP_MIR_POSITION: 51.189155,6.461587
       ULP_WEB_MASTER: 'true'
@@ -136,7 +136,7 @@ services:
     image: vlehner/ulp_microinforadiator:latest
     mem_limit: 828375040
     environment:
-      ULP_MIR_ID: 21
+      ULP_MIR_ID: 22
       MQTT_BROKER_HOST: iot.eclipse.org
       MQTT_BROKER_PORT: 1883
       MQTT_BROKER_USERNAME: test
