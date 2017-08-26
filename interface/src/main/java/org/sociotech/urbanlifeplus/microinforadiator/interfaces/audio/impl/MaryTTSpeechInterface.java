@@ -15,6 +15,7 @@ import org.sociotech.urbanlifeplus.microinforadiator.interfaces.audio.SpeechInte
 import org.springframework.stereotype.Component;
 
 import javax.sound.sampled.AudioInputStream;
+import java.util.Locale;
 
 /**
  * @author vituslehner 11.08.17
@@ -29,8 +30,7 @@ public class MaryTTSpeechInterface implements SpeechInterface {
     public MaryTTSpeechInterface() {
         try {
             mary = new LocalMaryInterface();
-
-            //marytts.setLocale(Locale.GERMAN);
+            mary.setLocale(Locale.GERMAN);
         } catch (MaryConfigurationException e) {
             logger.error("Mary error 1: ", e);
         }
