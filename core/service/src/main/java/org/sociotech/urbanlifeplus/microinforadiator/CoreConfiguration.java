@@ -50,7 +50,7 @@ public class CoreConfiguration {
         return new WayPoint(lat, lng);
     }
 
-    @Value("${ULP_RECURSION_DEPTH:3}")
+    @Value("${ULP_RECURSION_DEPTH:2}")
     private int recursionDepth;
 
     public int getRecursionDepth() {
