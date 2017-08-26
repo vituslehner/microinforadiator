@@ -93,7 +93,7 @@ public class NavigationReactor {
     private Polyline convertRouteToPolyline(Route route) {
         List<WayPoint> wayPoints = route.getWayPoints();
         Polyline line = new Polyline();
-        if (wayPoints != null && wayPoints.size() >= 2) {
+        if (wayPoints != null && wayPoints.size() >= 1) {
             line.startPath(convertWayPointToPoint(wayPoints.get(0)));
             for (int i = 1; i < wayPoints.size(); i++) {
                 line.lineTo(convertWayPointToPoint(wayPoints.get(i)));
