@@ -9,7 +9,7 @@ services:
     mem_limit: 828375040
     environment:
       ULP_MIR_ID: 14
-      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_HOST: broker.hivemq.com
       MQTT_BROKER_PORT: 1883
       MQTT_BROKER_USERNAME: test
       MQTT_BROKER_PASSWORD: test
@@ -25,7 +25,7 @@ services:
     mem_limit: 828375040
     environment:
       ULP_MIR_ID: 15
-      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_HOST: broker.hivemq.com
       MQTT_BROKER_PORT: 1883
       MQTT_BROKER_USERNAME: test
       MQTT_BROKER_PASSWORD: test
@@ -41,7 +41,7 @@ services:
     mem_limit: 828375040
     environment:
       ULP_MIR_ID: 16
-      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_HOST: broker.hivemq.com
       MQTT_BROKER_PORT: 1883
       MQTT_BROKER_USERNAME: test
       MQTT_BROKER_PASSWORD: test
@@ -57,7 +57,7 @@ services:
     mem_limit: 828375040
     environment:
       ULP_MIR_ID: 17
-      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_HOST: broker.hivemq.com
       MQTT_BROKER_PORT: 1883
       MQTT_BROKER_USERNAME: test
       MQTT_BROKER_PASSWORD: test
@@ -73,7 +73,7 @@ services:
     mem_limit: 828375040
     environment:
       ULP_MIR_ID: 18
-      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_HOST: broker.hivemq.com
       MQTT_BROKER_PORT: 1883
       MQTT_BROKER_USERNAME: test
       MQTT_BROKER_PASSWORD: test
@@ -89,7 +89,7 @@ services:
     mem_limit: 828375040
     environment:
       ULP_MIR_ID: 19
-      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_HOST: broker.hivemq.com
       MQTT_BROKER_PORT: 1883
       MQTT_BROKER_USERNAME: test
       MQTT_BROKER_PASSWORD: test
@@ -105,7 +105,7 @@ services:
     mem_limit: 828375040
     environment:
       ULP_MIR_ID: 20
-      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_HOST: broker.hivemq.com
       MQTT_BROKER_PORT: 1883
       MQTT_BROKER_USERNAME: test
       MQTT_BROKER_PASSWORD: test
@@ -121,7 +121,7 @@ services:
     mem_limit: 828375040
     environment:
       ULP_MIR_ID: 21
-      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_HOST: broker.hivemq.com
       MQTT_BROKER_PORT: 1883
       MQTT_BROKER_USERNAME: test
       MQTT_BROKER_PASSWORD: test
@@ -137,7 +137,7 @@ services:
     mem_limit: 828375040
     environment:
       ULP_MIR_ID: 22
-      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_HOST: broker.hivemq.com
       MQTT_BROKER_PORT: 1883
       MQTT_BROKER_USERNAME: test
       MQTT_BROKER_PASSWORD: test
