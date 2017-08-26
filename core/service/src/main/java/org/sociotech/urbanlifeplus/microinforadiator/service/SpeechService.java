@@ -4,6 +4,8 @@
 
 package org.sociotech.urbanlifeplus.microinforadiator.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sociotech.urbanlifeplus.microinforadiator.interfaces.audio.SpeechInterface;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class SpeechService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpeechInterface.class);
+
     private final SpeechInterface speechInterface;
 
     public SpeechService(SpeechInterface speechInterface) {
@@ -20,6 +24,7 @@ public class SpeechService {
     }
 
     public void speak(String text) {
+        LOGGER.debug("Speaking: {}", text);
         speechInterface.speak(text);
     }
 }
