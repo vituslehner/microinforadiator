@@ -8,6 +8,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sociotech.urbanlifeplus.microinforadiator.model.event.ReactorEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class ReactorLogger {
     }
 
     @Subscribe()
-    public void log(Object event) {
+    public void log(ReactorEvent event) {
         LOGGER.info("REACTOR EVENT: {}", event);
     }
 }

@@ -5,6 +5,8 @@
 package org.sociotech.urbanlifeplus.microinforadiator.service;
 
 import com.google.common.eventbus.EventBus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sociotech.urbanlifeplus.microinforadiator.CoreConfiguration;
 import org.sociotech.urbanlifeplus.microinforadiator.model.event.MirStatusEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,10 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class StatusPushService implements ApplicationListener<ApplicationReadyEvent> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(StatusPushService.class);
+
+    private static final int PUSH_PERIOD = 7;
 
     private final TimingService timingService;
     private final LightService lightService;
@@ -40,7 +46,8 @@ public class StatusPushService implements ApplicationListener<ApplicationReadyEv
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         if(coreConfiguration.getPushStatus()) {
-            timingService.scheduleAtFixedrate(this::publishStatus, 0, 5, TimeUnit.SECONDS);
+            LOGGER.info("Status Pushing is enabled. Period: {}", PUSH_PERIOD);
+            timingService.scheduleAtFixedrate(this::publishStatus, 0, PUSH_PERIOD, TimeUnit.SECONDS);
         }
     }
 
