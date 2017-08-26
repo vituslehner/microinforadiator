@@ -30,6 +30,8 @@ public class LightService {
     public LightService(Collection<LightInterface> lightInterfaces) {
         this.lightInterfaces = lightInterfaces;
         this.currentColors = new HashSet<>();
+
+        notifyInterfaces();
     }
 
     /**
