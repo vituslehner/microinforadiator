@@ -12,10 +12,12 @@ import com.google.common.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sociotech.urbanlifeplus.microinforadiator.CoreConfiguration;
+import org.sociotech.urbanlifeplus.microinforadiator.interfaces.light.LightColor;
 import org.sociotech.urbanlifeplus.microinforadiator.interfaces.proximity.Proximity;
 import org.sociotech.urbanlifeplus.microinforadiator.model.Route;
 import org.sociotech.urbanlifeplus.microinforadiator.model.User;
 import org.sociotech.urbanlifeplus.microinforadiator.model.WayPoint;
+import org.sociotech.urbanlifeplus.microinforadiator.model.event.LightColorResetEvent;
 import org.sociotech.urbanlifeplus.microinforadiator.model.event.UserProximityEvent;
 import org.sociotech.urbanlifeplus.microinforadiator.service.LightService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,13 @@ public class NavigationReactor {
         this.reactorEventBus.register(this);
     }
 
+    @Subscribe
+    public void lightColorResetEvent(LightColorResetEvent event) {
+        for (LightColor color : lightService.getCurrentColors()) {
+            lightService.removeColor(color);
+        }
+    }
+
     /**
      * Listen to reactor proximity events and update light and arrow interfaces accordingly.
      * Uses e.g. Google Maps APIs to calculate route information and identifier location on route.
@@ -68,7 +77,7 @@ public class NavigationReactor {
             // TODO light signal
         }
 
-        if(user != null && user.getRoute() != null && user.getColor() != null) {
+        if (user != null && user.getRoute() != null && user.getColor() != null) {
             handleRoute(user);
         }
     }

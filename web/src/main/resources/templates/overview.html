@@ -42,14 +42,27 @@
     <div id="map"></div>
     <hr/>
     <div id="controls">
-        <table style="border:0;margin:0;padding:0;width:100%">
+        <table style="border:0;margin:0;padding:0;width:100%;vertical-align: top">
             <tr>
                 <td>
                     <h2>Margot Nowak</h2>
                     <form onsubmit="return false;">
                         <p>
+                            <label>Farbe:
+                                <select name="margot_farbe">
+                                    <option>RED</option>
+                                    <option>GREEN</option>
+                                    <option selected="selected">BLUE</option>
+                                    <option>YELLOW</option>
+                                    <option>PINK</option>
+                                    <option>ORANGE</option>
+                                </select>
+                            </label>
+                        </p>
+                        <p>
                             <label>Start:
                                 <select name="margot_start" onchange="margotCalcShow()">
+                                    <option>Peter Franken, Hardterbroicher Str. 109, 41065 Mönchengladbach</option>
                                     <option>Hardterbroicher Str. 107, 41065 Mönchengladbach</option>
                                     <option>Bungtstraße 1, 41065 Mönchengladbach</option>
                                     <option>Bungtstraße 2, 41065 Mönchengladbach</option>
@@ -76,11 +89,26 @@
                                   value="Route berechnen und Annäherungsevent veröffentlichen"
                                   onclick="margotCalcPublish()"/>
                         </p>
+                        <p>
+                            <input type="button" value="Alle Strahler zurücksetzen" onclick="resetAllColors()"/>
+                        </p>
                     </form>
                 </td>
                 <td>
                     <h2>Brigitte Feldmann</h2>
                     <form onsubmit="return false;">
+                        <p>
+                            <label>Farbe:
+                                <select name="brigitte_farbe">
+                                    <option selected="selected">RED</option>
+                                    <option>GREEN</option>
+                                    <option>BLUE</option>
+                                    <option>YELLOW</option>
+                                    <option>PINK</option>
+                                    <option>ORANGE</option>
+                                </select>
+                            </label>
+                        </p>
                         <p>
                             <label>Start:
                                 <select name="brigitte_start" onchange="brigitteCalcShow()">
@@ -173,17 +201,42 @@
             var statusIndex = findIndexOfStatus(status.mirId);
             if (statusIndex === -1) {
                 data.push(status);
-                addOptions(status.mirId);
+                addOptions(status);
             } else {
                 data[statusIndex] = status;
             }
         }
 
-        function addOptions(mirId) {
-            var option = document.createElement("option");
-            option.text = mirId;
-            document.getElementsByName("margot_strahler")[0].add(option);
-            document.getElementsByName("brigitte_strahler")[0].add(option);
+        function addOptions(status) {
+            var option1 = document.createElement("option");
+            option1.text = status.mirId;
+            var option2 = document.createElement("option");
+            option2.text = status.mirId;
+            document.getElementsByName("margot_strahler")[0].add(option1);
+            document.getElementsByName("brigitte_strahler")[0].add(option2);
+
+            var position = status.position.lat + ", " + status.position.lng;
+            var text = "Strahler " + status.mirId + "  (" + position + ")";
+
+            var opt11 = document.createElement("option");
+            opt11.text = text;
+            opt11.value = position;
+            document.getElementsByName("margot_start")[0].add(opt11);
+
+            var opt12 = document.createElement("option");
+            opt12.text = text;
+            opt12.value = position;
+            document.getElementsByName("margot_ziel")[0].add(opt12);
+
+            var opt21 = document.createElement("option");
+            opt21.text = text;
+            opt21.value = position;
+            document.getElementsByName("brigitte_start")[0].add(opt21);
+
+            var opt22 = document.createElement("option");
+            opt22.text = text;
+            opt22.value = position;
+            document.getElementsByName("brigitte_ziel")[0].add(opt22);
         }
 
         function findIndexOfStatus(mirId) {
@@ -282,7 +335,7 @@
                         user: user,
                         proximity: "NEAR",
                         mirIBeaconMajorMinor: mirMajorMinor
-                    }
+                    };
                     var message = new Paho.MQTT.Message(JSON.stringify(event));
                     message.destinationName = topic;
                     mqttClient.send(message);
@@ -305,16 +358,58 @@
             var start = document.getElementsByName("margot_start")[0].value;
             var ziel = document.getElementsByName("margot_ziel")[0].value;
             var strahler = document.getElementsByName("margot_strahler")[0].value;
+            var farbe = document.getElementsByName("margot_farbe")[0].value;
 
             var user = {
                 id: 123,
                 firstName: "Margot",
                 lastName: "Nowak",
                 route: null,
-                color: "BLUE",
+                color: farbe,
                 impairments: null
             };
             calcDirectionsAndPublishUserProximity(start, ziel, user, strahler);
+        }
+
+        function brigitteCalcShow() {
+            var start = document.getElementsByName("margot_start")[0].value;
+            var ziel = document.getElementsByName("margot_ziel")[0].value;
+
+            showDirections(start, ziel);
+        }
+
+        function brigitteCalcPublish() {
+            var start = document.getElementsByName("britgitte_start")[0].value;
+            var ziel = document.getElementsByName("britgitte_ziel")[0].value;
+            var strahler = document.getElementsByName("britgitte_strahler")[0].value;
+            var farbe = document.getElementsByName("britgitte_farbe")[0].value;
+
+            var user = {
+                id: 124,
+                firstName: "Brigitte",
+                lastName: "Feldmann",
+                route: null,
+                color: farbe,
+                impairments: null
+            };
+            calcDirectionsAndPublishUserProximity(start, ziel, user, strahler);
+        }
+
+        function resetAllColors() {
+            console.log("Resetting.")
+            var strahler = document.getElementsByName("margot_strahler")[0].value;
+            var event = {
+                rawData: "{\"user\":null,\"doReset\":true,\"sourceMirId\":\"" + strahler + "\"}",
+                className: "org.sociotech.urbanlifeplus.microinforadiator.model.event.LightColorResetEvent",
+                topic: "ulp/mir/" + strahler,
+                mirSourceId: strahler,
+                mirPath: [],
+                recursionDepth: 100
+            };
+            console.log(event);
+            var message = new Paho.MQTT.Message(JSON.stringify(event));
+            message.destinationName = event.topic;
+            mqttClient.send(message);
         }
 
         /*]]>*/
