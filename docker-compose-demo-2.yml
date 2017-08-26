@@ -1,0 +1,150 @@
+# This Compose file contains a number of MIR configurations for demonstration purposes.
+# The first three IDs are reserved for actual hardware devices.
+# MIRs 4-13 are in the first Compose file.
+
+version: '2'
+services:
+  mir14:
+    image: vlehner/ulp_microinforadiator:latest
+    mem_limit: 828375040
+    environment:
+      ULP_MIR_ID: 14
+      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_PORT: 1883
+      MQTT_BROKER_USERNAME: test
+      MQTT_BROKER_PASSWORD: test
+      ULP_NEIGHBOURED_MIRS: 13,16
+      ULP_PUSH_STATUS: 'true'
+      ULP_MIR_POSITION: 51.188879,6.459694
+      ULP_WEB_MASTER: 'true'
+      ULP_WEB_CHILDREN: test
+      ULP_MIR_IBEACON_MAJOR: 333
+      ULP_MIR_IBEACON_MINOR: 14
+  mir15:
+    image: vlehner/ulp_microinforadiator:latest
+    mem_limit: 828375040
+    environment:
+      ULP_MIR_ID: 15
+      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_PORT: 1883
+      MQTT_BROKER_USERNAME: test
+      MQTT_BROKER_PASSWORD: test
+      ULP_NEIGHBOURED_MIRS: 3,16
+      ULP_PUSH_STATUS: 'true'
+      ULP_MIR_POSITION: 51.188646,6.460897
+      ULP_WEB_MASTER: 'true'
+      ULP_WEB_CHILDREN: test
+      ULP_MIR_IBEACON_MAJOR: 333
+      ULP_MIR_IBEACON_MINOR: 15
+  mir16:
+    image: vlehner/ulp_microinforadiator:latest
+    mem_limit: 828375040
+    environment:
+      ULP_MIR_ID: 16
+      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_PORT: 1883
+      MQTT_BROKER_USERNAME: test
+      MQTT_BROKER_PASSWORD: test
+      ULP_NEIGHBOURED_MIRS: 14,15,19
+      ULP_PUSH_STATUS: 'true'
+      ULP_MIR_POSITION: 51.189121,6.460552
+      ULP_WEB_MASTER: 'true'
+      ULP_WEB_CHILDREN: test
+      ULP_MIR_IBEACON_MAJOR: 333
+      ULP_MIR_IBEACON_MINOR: 16
+  mir17:
+    image: vlehner/ulp_microinforadiator:latest
+    mem_limit: 828375040
+    environment:
+      ULP_MIR_ID: 17
+      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_PORT: 1883
+      MQTT_BROKER_USERNAME: test
+      MQTT_BROKER_PASSWORD: test
+      ULP_NEIGHBOURED_MIRS: 18,20
+      ULP_PUSH_STATUS: 'true'
+      ULP_MIR_POSITION: 51.188798,6.461986
+      ULP_WEB_MASTER: 'true'
+      ULP_WEB_CHILDREN: test
+      ULP_MIR_IBEACON_MAJOR: 333
+      ULP_MIR_IBEACON_MINOR: 17
+  mir18:
+    image: vlehner/ulp_microinforadiator:latest
+    mem_limit: 828375040
+    environment:
+      ULP_MIR_ID: 18
+      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_PORT: 1883
+      MQTT_BROKER_USERNAME: test
+      MQTT_BROKER_PASSWORD: test
+      ULP_NEIGHBOURED_MIRS: 17,19
+      ULP_PUSH_STATUS: 'true'
+      ULP_MIR_POSITION: 51.189155,6.461587
+      ULP_WEB_MASTER: 'true'
+      ULP_WEB_CHILDREN: test
+      ULP_MIR_IBEACON_MAJOR: 333
+      ULP_MIR_IBEACON_MINOR: 18
+  mir19:
+    image: vlehner/ulp_microinforadiator:latest
+    mem_limit: 828375040
+    environment:
+      ULP_MIR_ID: 19
+      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_PORT: 1883
+      MQTT_BROKER_USERNAME: test
+      MQTT_BROKER_PASSWORD: test
+      ULP_NEIGHBOURED_MIRS: 18,16
+      ULP_PUSH_STATUS: 'true'
+      ULP_MIR_POSITION: 51.189377,6.461351
+      ULP_WEB_MASTER: 'true'
+      ULP_WEB_CHILDREN: test
+      ULP_MIR_IBEACON_MAJOR: 333
+      ULP_MIR_IBEACON_MINOR: 19
+  mir20:
+    image: vlehner/ulp_microinforadiator:latest
+    mem_limit: 828375040
+    environment:
+      ULP_MIR_ID: 20
+      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_PORT: 1883
+      MQTT_BROKER_USERNAME: test
+      MQTT_BROKER_PASSWORD: test
+      ULP_NEIGHBOURED_MIRS: 3,17,21
+      ULP_PUSH_STATUS: 'true'
+      ULP_MIR_POSITION: 51.188374,6.462222
+      ULP_WEB_MASTER: 'true'
+      ULP_WEB_CHILDREN: test
+      ULP_MIR_IBEACON_MAJOR: 333
+      ULP_MIR_IBEACON_MINOR: 20
+  mir21:
+    image: vlehner/ulp_microinforadiator:latest
+    mem_limit: 828375040
+    environment:
+      ULP_MIR_ID: 21
+      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_PORT: 1883
+      MQTT_BROKER_USERNAME: test
+      MQTT_BROKER_PASSWORD: test
+      ULP_NEIGHBOURED_MIRS: 20, 22
+      ULP_PUSH_STATUS: 'true'
+      ULP_MIR_POSITION: 51.188432,6.463186
+      ULP_WEB_MASTER: 'true'
+      ULP_WEB_CHILDREN: test
+      ULP_MIR_IBEACON_MAJOR: 333
+      ULP_MIR_IBEACON_MINOR: 21
+  mir22:
+    image: vlehner/ulp_microinforadiator:latest
+    mem_limit: 828375040
+    environment:
+      ULP_MIR_ID: 21
+      MQTT_BROKER_HOST: iot.eclipse.org
+      MQTT_BROKER_PORT: 1883
+      MQTT_BROKER_USERNAME: test
+      MQTT_BROKER_PASSWORD: test
+      ULP_NEIGHBOURED_MIRS: 21
+      ULP_PUSH_STATUS: 'true'
+      ULP_MIR_POSITION: 51.188509,6.463846
+      ULP_WEB_MASTER: 'true'
+      ULP_WEB_CHILDREN: test
+      ULP_MIR_IBEACON_MAJOR: 333
+      ULP_MIR_IBEACON_MINOR: 22
