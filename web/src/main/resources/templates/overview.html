@@ -89,9 +89,6 @@
                                   value="Route berechnen und Annäherungsevent veröffentlichen"
                                   onclick="margotCalcPublish()"/>
                         </p>
-                        <p>
-                            <input type="button" value="Alle Strahler zurücksetzen" onclick="resetAllColors()"/>
-                        </p>
                     </form>
                 </td>
                 <td>
@@ -142,6 +139,24 @@
                 </td>
             </tr>
         </table>
+        <hr/>
+        <p>
+            <input type="button" value="Alle Strahler zurücksetzen" onclick="resetAllColors()"/>
+        </p>
+        <hr/>
+        <p>
+            <select name="weather">
+                <option>SUN</option>
+                <option>CLOUDS</option>
+                <option>RAIN</option>
+                <option>STORM</option>
+                <option>SNOW</option>
+                <option>NONE</option>
+            </select>
+        </p>
+        <p>
+            <input type="button" value="Wetterdaten veröffentlichen" onclick="publishWeather()"/>
+        </p>
     </div>
 
     <script>
@@ -170,7 +185,7 @@
             markers = [];
 
             var clientId = "ulp-web-" + Math.random().toString(36).substring(7);
-            mqttClient = new Paho.MQTT.Client("ws://iot.eclipse.org:80/ws", clientId);
+            mqttClient = new Paho.MQTT.Client("broker.hivemq.com", 8000, clientId);
 
             mqttClient.onConnectionLost = onMqttConnectionLost;
             mqttClient.onMessageArrived = onMqttMessageArrived;
@@ -372,17 +387,17 @@
         }
 
         function brigitteCalcShow() {
-            var start = document.getElementsByName("margot_start")[0].value;
-            var ziel = document.getElementsByName("margot_ziel")[0].value;
+            var start = document.getElementsByName("brigitte_start")[0].value;
+            var ziel = document.getElementsByName("brigitte_ziel")[0].value;
 
             showDirections(start, ziel);
         }
 
         function brigitteCalcPublish() {
-            var start = document.getElementsByName("britgitte_start")[0].value;
-            var ziel = document.getElementsByName("britgitte_ziel")[0].value;
-            var strahler = document.getElementsByName("britgitte_strahler")[0].value;
-            var farbe = document.getElementsByName("britgitte_farbe")[0].value;
+            var start = document.getElementsByName("brigitte_start")[0].value;
+            var ziel = document.getElementsByName("brigitte_ziel")[0].value;
+            var strahler = document.getElementsByName("brigitte_strahler")[0].value;
+            var farbe = document.getElementsByName("brigitte_farbe")[0].value;
 
             var user = {
                 id: 124,
@@ -396,7 +411,7 @@
         }
 
         function resetAllColors() {
-            console.log("Resetting.")
+            console.log("Resetting all colors.")
             var strahler = document.getElementsByName("margot_strahler")[0].value;
             var event = {
                 rawData: "{\"user\":null,\"doReset\":true,\"sourceMirId\":\"" + strahler + "\"}",
@@ -406,7 +421,25 @@
                 mirPath: [],
                 recursionDepth: 100
             };
-            console.log(event);
+
+            var message = new Paho.MQTT.Message(JSON.stringify(event));
+            message.destinationName = event.topic;
+            mqttClient.send(message);
+        }
+
+        function publishWeather() {
+            var wetter = document.getElementsByName("weather")[0].value;
+            var strahler = document.getElementsByName("margot_strahler")[0].value;
+            console.log("Publishing weather " + wetter + ".");
+            var event = {
+                rawData: "{\"user\":null,\"weather\":\"" + wetter + "\",\"sourceMirId\":\"" + strahler + "\"}",
+                className: "org.sociotech.urbanlifeplus.microinforadiator.model.event.WeatherEvent",
+                topic: "ulp/mir/" + strahler,
+                mirSourceId: strahler,
+                mirPath: [],
+                recursionDepth: 100
+            };
+
             var message = new Paho.MQTT.Message(JSON.stringify(event));
             message.destinationName = event.topic;
             mqttClient.send(message);
