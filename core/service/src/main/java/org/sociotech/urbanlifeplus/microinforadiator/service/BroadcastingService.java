@@ -127,7 +127,6 @@ public class BroadcastingService implements MqttListener {
     @Subscribe
     public void broadcastStatusEvent(MirStatusEvent event) {
         try {
-            LOGGER.debug("Broadcasting status: {}", event);
             convertAndSendEvent(event, TOPIC_BASE + TOPIC_SUFFIX_STATUS);
         } catch (JsonProcessingException e) {
             LOGGER.error("Could not generate JSON from status: {}", event, e);
