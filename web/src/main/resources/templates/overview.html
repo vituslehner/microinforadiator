@@ -26,7 +26,7 @@
 
         #map {
             width: 100%;
-            height: 400px;
+            height: 500px;
         }
     </style>
     <!-- Eclipse Paho JavaScript MQTT Client -->
@@ -59,21 +59,6 @@
 
             data = [];
             markers = [];
-            /*data = ["51.187670, 6.462004",
-             "51.187684, 6.461759",
-             "51.187698, 6.461524",
-             "51.187712, 6.461304",
-             "51.187747, 6.460946",
-             "51.187911, 6.460667",
-             "51.187914, 6.460508",
-             "51.187758, 6.460262",
-             "51.187695, 6.460557",
-             "51.188048, 6.460471",
-             "51.188328, 6.460119",
-             "51.188126, 6.460942",
-             "51.187421, 6.462069",
-             "51.187612, 6.462536",
-             "51.187604, 6.462981"];*/
 
             var clientId = "ulp-web-" + Math.random().toString(36).substring(7);
             mqttClient = new Paho.MQTT.Client("ws://iot.eclipse.org:80/ws", clientId);
@@ -145,12 +130,6 @@
             var latLng = new google.maps.LatLng(coords.lat, coords.lng);
 
             var color = '#cecece';
-            /*if (i === 2 || i === 3 || i === 4) {
-             color = '#eb111f'
-             }
-             else if (i === 6 || i === 7 || i === 9) {
-             color = '#524ee3'
-             }*/
             var circleMarker = new google.maps.Circle({
                 strokeColor: '#ffffff',
                 strokeOpacity: 0.95,
@@ -159,7 +138,7 @@
                 fillOpacity: 0.85,
                 map: map,
                 center: latLng,
-                radius: 4
+                radius: 5
             });
             markers.push({
                 mirId: item.mirId,
