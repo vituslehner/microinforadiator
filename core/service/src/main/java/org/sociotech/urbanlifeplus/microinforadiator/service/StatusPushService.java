@@ -25,7 +25,7 @@ public class StatusPushService implements ApplicationListener<ApplicationReadyEv
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StatusPushService.class);
 
-    private static final int PUSH_PERIOD = 7;
+    private static final int PUSH_PERIOD = 4;
 
     private final TimingService timingService;
     private final LightService lightService;
