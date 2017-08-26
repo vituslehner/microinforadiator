@@ -37,7 +37,7 @@ public class NavigationReactor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NavigationReactor.class);
 
-    private static final double DISTANCE_TOLERANCE = 0.001d;
+    private static final double DISTANCE_TOLERANCE = 0.00013d;
 
     private final CoreConfiguration coreConfiguration;
     private final LightService lightService;
