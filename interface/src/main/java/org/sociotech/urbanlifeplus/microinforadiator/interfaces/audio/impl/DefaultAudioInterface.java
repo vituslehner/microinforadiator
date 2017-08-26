@@ -2,11 +2,11 @@
  * Copyright (c) 2017. Vitus Lehner. UrbanLife+. Universität der Bundeswehr München.
  */
 
-package org.sociotech.urbanlifeplus.microinforadiator.interfaces.speech.impl;
+package org.sociotech.urbanlifeplus.microinforadiator.interfaces.audio.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sociotech.urbanlifeplus.microinforadiator.interfaces.speech.AudioInterface;
+import org.sociotech.urbanlifeplus.microinforadiator.interfaces.audio.AudioInterface;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;

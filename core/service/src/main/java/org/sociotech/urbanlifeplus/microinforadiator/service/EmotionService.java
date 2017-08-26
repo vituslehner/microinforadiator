@@ -4,7 +4,7 @@
 
 package org.sociotech.urbanlifeplus.microinforadiator.service;
 
-import org.sociotech.urbanlifeplus.microinforadiator.interfaces.speech.AudioInterface;
+import org.sociotech.urbanlifeplus.microinforadiator.interfaces.audio.AudioInterface;
 import org.springframework.stereotype.Service;
 
 /**
