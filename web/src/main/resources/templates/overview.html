@@ -40,6 +40,39 @@
     <p>UrbanLife+ | MIR-ID: <strong th:text="${mir_id}"/> <span th:text="${message}"/></p>
     <hr/>
     <div id="map"></div>
+    <hr/>
+    <div id="controls">
+        <h2>Margot Nowak</h2>
+        <form onsubmit="return false;">
+            <p>
+                <label>Start:
+                    <select name="margot_start">
+                        <option>Hardterbroicher Str. 107, 41065 Mönchengladbach</option>
+                        <option>Bungtstraße 1, 41065 Mönchengladbach</option>
+                        <option>Bungtstraße 2, 41065 Mönchengladbach</option>
+                        <option>Dechant-Janssen-Weg 2, 41065 Mönchengladbach</option>
+                    </select>
+                </label>
+            </p>
+            <p>
+                <label>Ziel:
+                    <select name="margot_ziel">
+                        <option>Dechant-Janssen-Weg 11, 41065 Mönchengladbach</option>
+                    </select>
+                </label>
+            </p>
+            <p><input type="submit" name="margot_submit_show" value="Route berechnen und anzeigen"
+                      onclick="margotCalcShow()"/></p>
+            <p>
+                <label>Strahler:
+                    <select name="margot_strahler">
+                    </select>
+                </label>
+            </p>
+            <p><input type="submit" name="margot_submit_publish"
+                      value="Route berechnen und Annäherungsevent veröffentlichen" onclick="margotCalcPublish()"/></p>
+        </form>
+    </div>
 
     <script>
         /*<![CDATA[*/
@@ -50,12 +83,18 @@
         var refreshJob;
         var refreshCounter = 0;
 
+        var directionsService;
+        var directionsDisplay;
+
         function initDemo() {
             map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 18,
                 center: new google.maps.LatLng(51.1876702, 6.4605512),
                 mapTypeId: 'hybrid'
             });
+            directionsService = new google.maps.DirectionsService;
+            directionsDisplay = new google.maps.DirectionsRenderer;
+            directionsDisplay.setMap(map);
 
             data = [];
             markers = [];
@@ -83,7 +122,7 @@
         }
 
         function onMqttMessageArrived(message) {
-            console.log("MQTT message received: " + message.payloadString);
+            //console.log("MQTT message received: " + message.payloadString);
             updateData(message.payloadString);
         }
 
@@ -92,6 +131,9 @@
             var statusIndex = findIndexOfStatus(status.mirId);
             if (statusIndex === -1) {
                 data.push(status);
+                var option = document.createElement("option");
+                option.text = status.mirId;
+                document.getElementsByName("margot_strahler")[0].add(option);
             } else {
                 data[statusIndex] = status;
             }
@@ -104,13 +146,13 @@
         }
 
         function refreshMap() {
-            console.log("Refreshing map. %d data items.", data.length);
+            //console.log("Refreshing map. %d data items.", data.length);
             data.forEach(refreshMirMarker);
             refreshCounter++;
         }
 
         function refreshMirMarker(item) {
-            console.log("Refreshing marker: %o", item);
+            //console.log("Refreshing marker: %o", item);
             if (typeof findMarker(item.mirId) === 'undefined') {
                 addMarker(item);
             }
@@ -154,6 +196,72 @@
                 //strokeColor: newColor
             };
             marker.setOptions(newCircleOptions);
+        }
+
+        function showDirections(origin, destination) {
+            directionsService.route({
+                origin: origin,
+                destination: destination,
+                travelMode: 'WALKING'
+            }, function (response, status) {
+                if (status === 'OK') {
+                    directionsDisplay.setDirections(response);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+        }
+
+        function calcDirectionsAndPublishUserProximity(origin, destination, user, mirId) {
+            directionsService.route({
+                origin: origin,
+                destination: destination,
+                travelMode: 'WALKING'
+            }, function (response, status) {
+                if (status === 'OK') {
+                    var mirMajorMinor = "333-" + mirId;
+                    var topic = "ulp/sp/" + user.id + "/" + mirMajorMinor;
+                    console.log("Path: " + response.routes[0].overview_path)
+                    user.route = {
+                        "wayPoints": response.routes[0].overview_path
+                    };
+                    var event = {
+                        "user": user,
+                        "proximity": "NEAR",
+                        "mirIBeaconMajorMinor": mirMajorMinor
+                    }
+                    var message = new Paho.MQTT.Message(JSON.stringify(event));
+                    message.destinationName = topic;
+                    mqttClient.send(message);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+        }
+
+        /*** DEMO-SPECIFIC ***/
+
+        function margotCalcShow() {
+            var start = document.getElementsByName("margot_start")[0].value;
+            var ziel = document.getElementsByName("margot_ziel")[0].value;
+
+            showDirections(start, ziel);
+        }
+
+        function margotCalcPublish() {
+            var start = document.getElementsByName("margot_start")[0].value;
+            var ziel = document.getElementsByName("margot_ziel")[0].value;
+            var strahler = document.getElementsByName("margot_strahler")[0].value;
+
+            var user = {
+                "id": 123,
+                "firstName": "Margot",
+                "lastName": "Nowak",
+                "route": null,
+                "color": "BLUE",
+                "impairments": null
+            };
+            calcDirectionsAndPublishUserProximity(start, ziel, user, strahler);
         }
 
         /*]]>*/
