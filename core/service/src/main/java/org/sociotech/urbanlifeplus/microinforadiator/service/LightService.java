@@ -4,6 +4,8 @@
 
 package org.sociotech.urbanlifeplus.microinforadiator.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sociotech.urbanlifeplus.microinforadiator.interfaces.light.LightColor;
 import org.sociotech.urbanlifeplus.microinforadiator.interfaces.light.LightInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ import java.util.Optional;
  */
 @Service
 public class LightService {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(LightService.class);
 
     private final Collection<LightInterface> lightInterfaces;
     private final Collection<LightColor> currentColors;
@@ -69,7 +73,13 @@ public class LightService {
      * Notify light interfaces about changes.
      */
     private void notifyInterfaces() {
-        lightInterfaces.forEach(lightInterface -> lightInterface.setColors(currentColors));
+        lightInterfaces.forEach((lightInterface) -> {
+            try {
+                lightInterface.setColors(currentColors);
+            } catch (Exception e) {
+                LOGGER.error("Failed to notify light interface about light color changes.", e);
+            }
+        });
     }
 
     public Collection<LightColor> getCurrentColors() {
