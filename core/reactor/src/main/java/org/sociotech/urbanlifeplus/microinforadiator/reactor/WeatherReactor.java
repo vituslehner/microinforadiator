@@ -65,6 +65,7 @@ public class WeatherReactor {
                 break;
             case RAIN:
                 texts.add("Es wird Regen vorausgesagt. Nehmen Sie einen Schirm mit.");
+                texts.add("Die Wetterdienste prognostizieren Regen. Stellen Sie sich darauf ein.");
                 texts.add("Es soll bald regnen. Vielleicht möchten Sie zum Geschäft Angelikas Festmoden gehen, um trocken zu bleiben.");
                 break;
             case STORM:
