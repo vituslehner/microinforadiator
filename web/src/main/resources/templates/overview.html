@@ -366,6 +366,15 @@
             var start = document.getElementsByName("margot_start")[0].value;
             var ziel = document.getElementsByName("margot_ziel")[0].value;
 
+            var options = document.getElementsByName("margot_start")[0].options;
+            if(options.length > 0) {
+                var option = options[document.getElementsByName("margot_start")[0].selectedIndex];
+                if(option.text && option.text.startsWith("Strahler ")) {
+                    var id = option.text.split(" ")[1];
+                    document.getElementsByName("margot_strahler")[0].value = id;
+                }
+            }
+
             showDirections(start, ziel);
         }
 
