@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import javax.sound.sampled.*;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -46,8 +47,9 @@ public class DefaultAudioInterface implements AudioInterface, LineListener {
 
         try {
             InputStream audioFile = getClass().getResourceAsStream("/media/sound_" + name + ".wav");
+            InputStream bufferedIn = new BufferedInputStream(audioFile);
 
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(bufferedIn);
             AudioFormat format = audioStream.getFormat();
             DataLine.Info info = new DataLine.Info(Clip.class, format);
 
