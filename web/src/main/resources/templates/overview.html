@@ -360,20 +360,24 @@
             });
         }
 
+        function updateMirNumber(selectTacStart, selectTagMir) {
+            var options = document.getElementsByName(selectTacStart)[0].options;
+            if(options.length > 0) {
+                var option = options[document.getElementsByName(selectTacStart)[0].selectedIndex];
+                if(option.text && option.text.startsWith("Strahler ")) {
+                    var id = option.text.split(" ")[1];
+                    document.getElementsByName(selectTagMir)[0].value = id;
+                }
+            }
+        }
+
         /*** DEMO-SPECIFIC ***/
 
         function margotCalcShow() {
             var start = document.getElementsByName("margot_start")[0].value;
             var ziel = document.getElementsByName("margot_ziel")[0].value;
 
-            var options = document.getElementsByName("margot_start")[0].options;
-            if(options.length > 0) {
-                var option = options[document.getElementsByName("margot_start")[0].selectedIndex];
-                if(option.text && option.text.startsWith("Strahler ")) {
-                    var id = option.text.split(" ")[1];
-                    document.getElementsByName("margot_strahler")[0].value = id;
-                }
-            }
+            updateMirNumber("margot_start", "margot_strahler");
 
             showDirections(start, ziel);
         }
@@ -398,6 +402,8 @@
         function brigitteCalcShow() {
             var start = document.getElementsByName("brigitte_start")[0].value;
             var ziel = document.getElementsByName("brigitte_ziel")[0].value;
+
+            updateMirNumber("brigitte_start", "brigitte_strahler");
 
             showDirections(start, ziel);
         }
