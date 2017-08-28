@@ -11,9 +11,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import javax.sound.sampled.*;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.InputStream;
 
 /**
  * @author vituslehner 26.08.17
@@ -46,7 +45,7 @@ public class DefaultAudioInterface implements AudioInterface, LineListener {
         logger.debug("Playing sound {} now.", name);
 
         try {
-            File audioFile = new File(getClass().getResource("/media/sound_" + name + ".wav").toURI());
+            InputStream audioFile = getClass().getResourceAsStream("/media/sound_" + name + ".wav");
 
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
             AudioFormat format = audioStream.getFormat();
@@ -68,8 +67,6 @@ public class DefaultAudioInterface implements AudioInterface, LineListener {
             logger.error("Audio line for playing back is unavailable.", e);
         } catch (IOException e) {
             logger.error("Error playing the audio file.", e);
-        } catch (URISyntaxException e) {
-            logger.error("URI Syntax error.", e);
         }
     }
 
