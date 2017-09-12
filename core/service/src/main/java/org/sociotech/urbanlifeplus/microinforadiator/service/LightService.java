@@ -8,13 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sociotech.urbanlifeplus.microinforadiator.interfaces.light.LightColor;
 import org.sociotech.urbanlifeplus.microinforadiator.interfaces.light.LightInterface;
+import org.sociotech.urbanlifeplus.microinforadiator.interfaces.light.LightPhase;
+import org.sociotech.urbanlifeplus.microinforadiator.interfaces.light.LightSymbol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Service to update the lighting interfaces. Light colors applied to this service are automatically
@@ -28,13 +27,24 @@ public class LightService {
     private final static Logger LOGGER = LoggerFactory.getLogger(LightService.class);
 
     private final Collection<LightInterface> lightInterfaces;
-    private final Collection<LightColor> currentColors;
+    private final Collection<LightPhase> currentPhases;
 
     @Autowired
     public LightService(Collection<LightInterface> lightInterfaces) {
         this.lightInterfaces = lightInterfaces;
-        this.currentColors = new HashSet<>();
+        this.currentPhases = Collections.synchronizedCollection(new HashSet<>());
 
+        notifyInterfaces();
+    }
+
+    /**
+     * Add a color to the lights.
+     *
+     * @param color  the color
+     * @param lightSymbol the lightSymbol
+     */
+    public void addPhase(LightColor color, LightSymbol lightSymbol) {
+        currentPhases.add(new LightPhase(color, lightSymbol));
         notifyInterfaces();
     }
 
@@ -43,8 +53,8 @@ public class LightService {
      *
      * @param color the color
      */
-    public void addColor(LightColor color) {
-        currentColors.add(color);
+    public void addPhase(LightColor color) {
+        currentPhases.add(new LightPhase(color, LightSymbol.NONE));
         notifyInterfaces();
     }
 
@@ -53,20 +63,16 @@ public class LightService {
      *
      * @param color the color
      */
-    public void removeColor(LightColor color) {
-        currentColors.remove(color);
-        notifyInterfaces();
-    }
+    public void removeColorPhase(LightColor color) {
+        Optional<LightPhase> phase =
+                currentPhases.stream()
+                        .filter(p -> Objects.equals(color, p.getLightColor()))
+                        .findFirst();
 
-    /**
-     * Returns an {@link Optional} that contains a color that is not in use yet.
-     *
-     * @return a spare color
-     */
-    public Optional<LightColor> acquireSpareColor() {
-        return Arrays.stream(LightColor.values())
-                .filter(lightColor -> !currentColors.contains(lightColor))
-                .findFirst();
+        if (phase.isPresent()) {
+            currentPhases.remove(phase.get());
+            notifyInterfaces();
+        }
     }
 
     /**
@@ -75,14 +81,14 @@ public class LightService {
     private void notifyInterfaces() {
         lightInterfaces.forEach((lightInterface) -> {
             try {
-                lightInterface.setColors(currentColors);
+                lightInterface.setPhases(currentPhases);
             } catch (Exception e) {
                 LOGGER.error("Failed to notify light interface about light color changes.", e);
             }
         });
     }
 
-    public Collection<LightColor> getCurrentColors() {
-        return currentColors;
+    public Collection<LightPhase> getCurrentPhases() {
+        return currentPhases;
     }
 }

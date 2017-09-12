@@ -12,7 +12,7 @@ import com.google.common.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sociotech.urbanlifeplus.microinforadiator.CoreConfiguration;
-import org.sociotech.urbanlifeplus.microinforadiator.interfaces.light.LightColor;
+import org.sociotech.urbanlifeplus.microinforadiator.interfaces.light.LightPhase;
 import org.sociotech.urbanlifeplus.microinforadiator.interfaces.proximity.Proximity;
 import org.sociotech.urbanlifeplus.microinforadiator.model.Route;
 import org.sociotech.urbanlifeplus.microinforadiator.model.User;
@@ -59,8 +59,8 @@ public class NavigationReactor {
 
     @Subscribe
     public void lightColorResetEvent(LightColorResetEvent event) {
-        for (LightColor color : lightService.getCurrentColors()) {
-            lightService.removeColor(color);
+        for (LightPhase phase : lightService.getCurrentPhases()) {
+            lightService.removeColorPhase(phase.getLightColor());
         }
     }
 
@@ -83,13 +83,13 @@ public class NavigationReactor {
         boolean isOnRoute = isOnRoute(user);
         if (isOnRoute) {
             LOGGER.debug("MIR {} is on route..", user.getId());
-            lightService.addColor(user.getColor());
+            lightService.addPhase(user.getColor());
             if (proximity == NEAR && isLocalEvent(event)) {
                 emotionService.givePositiveFeedbackSignal();
             }
         } else {
             LOGGER.debug("MIR {} is NOT on route.", user.getId());
-            lightService.removeColor(user.getColor());
+            lightService.removeColorPhase(user.getColor());
             if (proximity == NEAR && isLocalEvent(event)) {
                 emotionService.giveNegativeFeedbackSignal();
             }

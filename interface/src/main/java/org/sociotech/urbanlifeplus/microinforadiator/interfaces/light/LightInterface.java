@@ -13,7 +13,7 @@ import java.util.Collection;
  */
 public interface LightInterface extends MirInterface {
 
-    void setColors(Collection<LightColor> colors);
+    void setPhases(Collection<LightPhase> phases);
 
     void switchOff();
 

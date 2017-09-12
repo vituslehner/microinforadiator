@@ -40,7 +40,7 @@ public class SenseHatLightInterface extends AbstractLightInterface {
 
     @Override
     protected void update() {
-        logger.debug("SenseHAT: Received light command: {}", getColors());
+        logger.debug("SenseHAT: Received light command: {}", getPhases());
 
         disposeProcess();
 
@@ -52,7 +52,7 @@ public class SenseHatLightInterface extends AbstractLightInterface {
         List<String> args = new ArrayList<>();
         args.add("python");
         args.add(scriptPath);
-        getColors().forEach(color -> args.add(color.toString()));
+        getPhases().forEach(color -> args.add(color.toString()));
         return args.toArray(new String[args.size()]);
     }
 

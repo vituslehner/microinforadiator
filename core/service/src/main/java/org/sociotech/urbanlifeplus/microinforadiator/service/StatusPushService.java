@@ -8,6 +8,7 @@ import com.google.common.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sociotech.urbanlifeplus.microinforadiator.CoreConfiguration;
+import org.sociotech.urbanlifeplus.microinforadiator.interfaces.light.LightPhase;
 import org.sociotech.urbanlifeplus.microinforadiator.model.event.MirStatusEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,7 +16,9 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author vituslehner 12.08.17
@@ -52,7 +55,8 @@ public class StatusPushService implements ApplicationListener<ApplicationReadyEv
     }
 
     private void publishStatus() {
-        MirStatusEvent status = new MirStatusEvent(coreConfiguration.getMirId(), coreConfiguration.getMirPositionAsWayPoint(), lightService.getCurrentColors());
+        Collection colors = lightService.getCurrentPhases().stream().map(LightPhase::getLightColor).collect(Collectors.toList());
+        MirStatusEvent status = new MirStatusEvent(coreConfiguration.getMirId(), coreConfiguration.getMirPositionAsWayPoint(), colors);
         reactorEventBus.post(status);
     }
 }
