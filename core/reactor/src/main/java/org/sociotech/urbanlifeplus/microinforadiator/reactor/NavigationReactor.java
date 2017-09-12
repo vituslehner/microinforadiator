@@ -21,6 +21,7 @@ import org.sociotech.urbanlifeplus.microinforadiator.model.event.LightColorReset
 import org.sociotech.urbanlifeplus.microinforadiator.model.event.UserProximityEvent;
 import org.sociotech.urbanlifeplus.microinforadiator.service.EmotionService;
 import org.sociotech.urbanlifeplus.microinforadiator.service.LightService;
+import org.sociotech.urbanlifeplus.microinforadiator.service.SymbolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -46,13 +47,15 @@ public class NavigationReactor {
     private final CoreConfiguration coreConfiguration;
     private final LightService lightService;
     private final EmotionService emotionService;
+    private final SymbolService symbolService;
     private final EventBus reactorEventBus;
 
     @Autowired
-    public NavigationReactor(CoreConfiguration coreConfiguration, LightService lightService, EmotionService emotionService, @Qualifier("reactorEventBus") EventBus reactorEventBus) {
+    public NavigationReactor(CoreConfiguration coreConfiguration, LightService lightService, EmotionService emotionService, SymbolService symbolService, @Qualifier("reactorEventBus") EventBus reactorEventBus) {
         this.coreConfiguration = coreConfiguration;
         this.lightService = lightService;
         this.emotionService = emotionService;
+        this.symbolService = symbolService;
         this.reactorEventBus = reactorEventBus;
         this.reactorEventBus.register(this);
     }
@@ -83,7 +86,7 @@ public class NavigationReactor {
         boolean isOnRoute = isOnRoute(user);
         if (isOnRoute) {
             LOGGER.debug("MIR {} is on route..", user.getId());
-            lightService.addPhase(user.getColor());
+            lightService.addPhase(user.getColor(), symbolService.getCurrentSymbol());
             if (proximity == NEAR && isLocalEvent(event)) {
                 emotionService.givePositiveFeedbackSignal();
             }

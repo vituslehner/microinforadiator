@@ -52,7 +52,10 @@ public class SenseHatLightInterface extends AbstractLightInterface {
         List<String> args = new ArrayList<>();
         args.add("python");
         args.add(scriptPath);
-        getPhases().forEach(color -> args.add(color.toString()));
+        getPhases().forEach(phase -> {
+            args.add(phase.getLightColor().toString());
+            args.add(phase.getLightSymbol().toString());
+        });
         return args.toArray(new String[args.size()]);
     }
 

@@ -1,9 +1,12 @@
+import math
 import sys
 from pprint import pprint
 from sense_hat import SenseHat
 from time import sleep
 
 sense = SenseHat()
+
+sense.set_rotation(90)
 
 phases = sys.argv
 pprint(phases)
@@ -15,10 +18,11 @@ if len(phases) == 0:
     sense.clear()
     sys.exit()
 
-if len(phases) % 2 == 0:
-    print 'Equal number of colors and symbols (light phases) must be given. Clearing HAT and exiting.'
-    sense.clear()
-    sys.exit()
+
+# if len(phases) % 2 == 0:
+#    print 'Equal number of colors and symbols (light phases) must be given. Clearing HAT and exiting.'
+#    sense.clear()
+#    sys.exit()
 
 
 def getColorTuple(code):
@@ -85,7 +89,7 @@ def getSymbolPixels(symbol, bg):
             O, O, O, X, X, O, O, O,
             O, O, O, X, X, O, O, O,
             O, O, O, O, O, O, O, O,
-            O, O, X, X, X, X, O, O,
+            O, O, X, X, X, O, O, O,
             O, O, O, X, X, O, O, O,
             O, O, O, X, X, O, O, O,
             O, O, O, X, X, O, O, O,
@@ -99,7 +103,7 @@ def getSymbolPixels(symbol, bg):
             O, X, O, O, O, O, X, O,
             X, O, O, O, O, O, O, X,
             O, X, X, X, X, X, X, O,
-            O, O, X, X, O, O, O, O
+            O, O, O, X, X, O, O, O
         ]
     }
     return switcher.get(symbol, [
@@ -113,36 +117,39 @@ def getSymbolPixels(symbol, bg):
         O, O, O, O, O, O, O, O
     ])
 
-    i = 0
-    while True:
-        if i == len(phases):
-            i = 0
-        color = phases[i]
-        symbol = phases[i + 1]
 
-        finalPixels = getSymbolPixels(symbol, getColorTuple(color))
+def getPixelsAnimated(j, finalPixels):
+    pixels = []
+    d = j / 200.0
+    #print 'J: ', j, ' 3: ', int(math.ceil(d * finalPixels[0][2])), ' D: ', d, ' M: ', math.ceil(d * finalPixels[0][2]), ' Final Pixels: ', finalPixels[0:16]
+    for p in finalPixels:
+        pixels.append((int(math.ceil(d * p[0])), int(math.ceil(d * p[1])), int(math.ceil(d * p[2]))))
+    #print 'Pixels: ', pixels[0:16]
+    return pixels
 
-        print 'Color: ', color, ' Symbol: ', symbol, ' final Pixels: ', finalPixels[0:16]
 
-        j = 0
-        while j < 255:
-            pixels = []
-            for p in finalPixels:
-                d = j / 255
-                pixels.append((d * p[0], d * p[1], d * p[2]))
-            sense.set_pixels(pixels)
-            sleep(5 / 1000)
-            j = j + 1
+i = 0
+while True:
+    if i == len(phases):
+        i = 0
+    color = phases[i]
+    symbol = phases[i + 1]
 
-        sleep(2)
+    finalPixels = getSymbolPixels(symbol, getColorTuple(color))
 
-        while j > 0:
-            pixels = []
-            for p in finalPixels:
-                d = j / 255
-                pixels.append((d * p[0], d * p[1], d * p[2]))
-            sense.set_pixels(pixels)
-            sleep(5 / 1000)
-            j = j - 1
+    print 'Color: ', color, ' Symbol: ', symbol, ' final Pixels: ', finalPixels[0:16]
 
-        i = i + 2
+    j = 0
+    while j < 200:
+        sense.set_pixels(getPixelsAnimated(j, finalPixels))
+        sleep(0.007)
+        j = j + 1
+
+    sleep(1.5)
+
+    while j > 0:
+        sense.set_pixels(getPixelsAnimated(j, finalPixels))
+        sleep(0.007)
+        j = j - 1
+
+    i = i + 2

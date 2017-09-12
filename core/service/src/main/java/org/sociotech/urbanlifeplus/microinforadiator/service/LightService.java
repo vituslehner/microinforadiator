@@ -44,6 +44,7 @@ public class LightService {
      * @param lightSymbol the lightSymbol
      */
     public void addPhase(LightColor color, LightSymbol lightSymbol) {
+        removeColorPhase(color);
         currentPhases.add(new LightPhase(color, lightSymbol));
         notifyInterfaces();
     }

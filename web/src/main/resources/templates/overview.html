@@ -157,6 +157,20 @@
         <p>
             <input type="button" value="Wetterdaten veröffentlichen" onclick="publishWeather()"/>
         </p>
+        <hr/>
+        <p>
+            <select name="symbol">
+                <option>ARROW_LEFT</option>
+                <option>ARROW_RIGHT</option>
+                <option>BELL</option>
+                <option>TOILET</option>
+                <option>INFO_POINT</option>
+                <option>NONE</option>
+            </select>
+        </p>
+        <p>
+            <input type="button" value="Symbol setzen" onclick="publishSymbol()"/>
+        </p>
     </div>
 
     <script>
@@ -449,6 +463,24 @@
             var event = {
                 rawData: "{\"user\":null,\"weather\":\"" + wetter + "\",\"sourceMirId\":\"" + strahler + "\"}",
                 className: "org.sociotech.urbanlifeplus.microinforadiator.model.event.WeatherEvent",
+                topic: "ulp/mir/" + strahler,
+                mirSourceId: strahler,
+                mirPath: [],
+                recursionDepth: 100
+            };
+
+            var message = new Paho.MQTT.Message(JSON.stringify(event));
+            message.destinationName = event.topic;
+            mqttClient.send(message);
+        }
+
+        function publishSymbol() {
+            var symbol = document.getElementsByName("symbol")[0].value;
+            var strahler = document.getElementsByName("margot_strahler")[0].value;
+            console.log("Publishing symbol " + symbol + ".");
+            var event = {
+                rawData: "{\"user\":null,\"lightSymbol\":\"" + symbol + "\",\"sourceMirId\":\"" + strahler + "\"}",
+                className: "org.sociotech.urbanlifeplus.microinforadiator.model.event.SymbolEvent",
                 topic: "ulp/mir/" + strahler,
                 mirSourceId: strahler,
                 mirPath: [],
