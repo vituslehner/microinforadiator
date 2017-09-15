@@ -20,4 +20,5 @@ deploy:
     - $TRAVIS_BUILD_DIR/build/distributions/ulp_microinforadiator-*.tar
   skip_cleanup: true
   on:
+    tags: true
     repo: vituslehner/ulp_microinforadiator
